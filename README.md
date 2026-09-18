@@ -143,4 +143,4 @@ campus-market-wechat/
 
 ## 📄 许可
 
-仅供学习交流使用。
+本项目基于 [MIT License](./LICENSE) 开源，欢迎学习交流与参考。
