@@ -1,0 +1,54 @@
+/* pages/my-posts/my-posts.wxss */
+.page { background: #f5f5f5; min-height: 100vh; padding: 20rpx; }
+
+.card { display: flex; background: #fff; border-radius: 16rpx; padding: 20rpx; margin-bottom: 20rpx; }
+.cover { width: 140rpx; height: 140rpx; border-radius: 12rpx; background: #f0f0f0; flex-shrink: 0; }
+.cover.no-img { display: flex; align-items: center; justify-content: center; font-size: 56rpx; color: #ccc; }
+.card-body { flex: 1; margin-left: 20rpx; }
+.card-title { font-size: 30rpx; color: #333; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-meta { display: flex; align-items: center; margin-top: 12rpx; }
+.price { color: #C9971C; font-size: 30rpx; font-weight: 700; }
+.status { margin-left: auto; font-size: 24rpx; color: #7C6BC0; }
+.status.off { color: #999; }
+.card-stats { display: flex; margin-top: 10rpx; }
+.stat { font-size: 24rpx; color: #999; margin-right: 24rpx; }
+.stat.flower { color: #d96a8a; }
+.ops { display: flex; margin-top: 16rpx; }
+.op-btn {
+  font-size: 22rpx; color: #7C6BC0; border: 1rpx solid #7C6BC0;
+  border-radius: 28rpx; padding: 6rpx 16rpx; margin-right: 12rpx;
+  white-space: nowrap;
+}
+.op-btn.danger { color: #e53935; border-color: #e53935; }
+
+.empty { text-align: center; padding: 200rpx 0; color: #bbb; font-size: 60rpx; }
+.empty-text { font-size: 28rpx; color: #999; margin-top: 20rpx; }
+.loading { text-align: center; color: #999; padding: 100rpx 0; }
+
+/* 交易状态徽标（card-meta 内第一项，左移顶格） */
+.trade-badge {
+  display: inline-block; padding: 2rpx 16rpx; margin-right: 12rpx;
+  font-size: 22rpx; color: #7C6BC0; background: #f4f1fb;
+  border: 1rpx solid #d9d2f0; border-radius: 18rpx;
+}
+.trade-badge.sold { color: #999; background: #f0f0f0; border-color: #ddd; }
+
+/* 骨架屏 */
+.skeleton-list { padding: 20rpx 24rpx; }
+.skeleton-card {
+  display: flex; background: #fff; border-radius: 16rpx; padding: 20rpx;
+  margin-bottom: 20rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.sk-cover { width: 160rpx; height: 160rpx; border-radius: 12rpx; background: #e9e9ec; flex-shrink: 0; }
+.sk-body { flex: 1; margin-left: 20rpx; padding-top: 8rpx; }
+.sk-line { background: #e9e9ec; border-radius: 8rpx; }
+.sk-title { width: 70%; height: 32rpx; }
+.sk-desc { width: 90%; height: 26rpx; margin-top: 16rpx; }
+.sk-row { display: flex; justify-content: space-between; align-items: center; margin-top: 28rpx; }
+.sk-price { width: 90rpx; height: 32rpx; }
+.sk-tag { width: 120rpx; height: 28rpx; margin-left: auto; }
+.skeleton-card .sk-line, .skeleton-card .sk-cover {
+  animation: sk-blink 1.2s ease-in-out infinite;
+}
+@keyframes sk-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }

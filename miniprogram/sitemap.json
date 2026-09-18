@@ -1,0 +1,9 @@
+{
+  "desc": "畅学尼龙",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

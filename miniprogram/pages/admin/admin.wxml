@@ -1,0 +1,136 @@
+<!-- pages/admin/admin.wxml：管理后台 -->
+<view class="page">
+
+  <!-- 顶部导航：帖子 / 认证 -->
+  <view class="top-nav">
+    <view class="nav-item {{tab === 'posts' ? 'active' : ''}}" data-tab="posts" bindtap="onTabTap">帖子管理</view>
+    <view class="nav-item {{tab === 'auth' ? 'active' : ''}}" data-tab="auth" bindtap="onTabTap">🎓 认证管理</view>
+    <view class="nav-item {{tab === 'reports' ? 'active' : ''}}" data-tab="reports" bindtap="onTabTap">🚩 举报管理{{repPending > 0 ? '·' + repPending : ''}}</view>
+  </view>
+
+  <!-- ===== 帖子管理 ===== -->
+  <block wx:if="{{tab === 'posts'}}">
+  <!-- 顶部统计 -->
+  <view class="stats">
+    <view class="stat-card"><view class="num">{{stats.total || 0}}</view><view class="lb">全部</view></view>
+    <view class="stat-card"><view class="num green">{{stats.on || 0}}</view><view class="lb">在售</view></view>
+    <view class="stat-card"><view class="num grey">{{stats.off || 0}}</view><view class="lb">下架</view></view>
+    <view class="stat-card"><view class="num red">{{stats.deleted || 0}}</view><view class="lb">已删</view></view>
+    <view class="stat-card"><view class="num purple">{{stats.users || 0}}</view><view class="lb">用户</view></view>
+    <view class="stat-card"><view class="num green">{{stats.approved || 0}}</view><view class="lb">🎓已认证</view></view>
+  </view>
+
+  <!-- 搜索 + 状态筛选 -->
+  <view class="toolbar">
+    <input class="search" placeholder="搜索标题…" value="{{keyword}}" bindinput="onSearchInput" confirm-type="search" bindconfirm="onSearch" />
+    <view class="btn" bindtap="onSearch">搜索</view>
+  </view>
+  <view class="filter-bar">
+    <view
+      wx:for="{{statusFilters}}"
+      wx:key="key"
+      class="filter {{status === item.key ? 'active' : ''}}"
+      data-status="{{item.key}}"
+      bindtap="onStatusTap"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- 帖子列表 -->
+  <view class="list">
+    <view wx:for="{{list}}" wx:key="_id" class="card">
+      <image wx:if="{{item.cover}}" class="cover" src="{{item.cover}}" mode="aspectFill" />
+      <view wx:else class="cover no-img">📄</view>
+      <view class="body">
+        <view class="title">{{item.title}}</view>
+        <view class="meta">
+          <text class="price">{{item.priceType === 'free' ? '免费' : item.priceType === 'bargain' ? '可议价' : '¥' + item.price}}</text>
+          <text class="status-badge {{item.status}}">{{item.status === 'on' ? '在售' : item.status === 'off' ? '已下架' : '已删'}}</text>
+        </view>
+        <view class="sub">{{item.nickname || '匿名'}} · {{item.category}}</view>
+        <view class="ops">
+          <view wx:if="{{item.status !== 'deleted'}}" class="op danger" data-id="{{item._id}}" bindtap="onDelete">删除</view>
+          <view wx:if="{{item.status === 'on'}}" class="op" data-id="{{item._id}}" bindtap="onOff">下架</view>
+          <view wx:if="{{item.status === 'off'}}" class="op" data-id="{{item._id}}" bindtap="onRecover">上架</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">没有帖子</view>
+  <view wx:if="{{loading}}" class="loading">加载中…</view>
+  <view wx:if="{{finished && list.length > 0}}" class="end">— 到底啦 —</view>
+  </block>
+
+  <!-- ===== 举报管理 ===== -->
+  <block wx:elif="{{tab === 'reports'}}">
+  <view class="filter-bar">
+    <view
+      wx:for="{{repFilters}}"
+      wx:key="key"
+      class="filter {{repStatus === item.key ? 'active' : ''}}"
+      data-status="{{item.key}}"
+      bindtap="onRepStatusTap"
+    >{{item.label}}</view>
+  </view>
+  <view class="rep-stats">
+    <view class="rep-stat"><text class="rep-num">{{repStats.pending || 0}}</text>待处理</view>
+    <view class="rep-stat"><text class="rep-num">{{repStats.autoHiddenGoods || 0}}</text>隐藏帖</view>
+    <view class="rep-stat"><text class="rep-num">{{repStats.autoHiddenWants || 0}}</text>隐藏求购</view>
+  </view>
+  <view class="list">
+    <view wx:for="{{repList}}" wx:key="_id" class="card rep-card">
+      <view class="rep-head">
+        <text class="rep-type {{item.targetType === 'want' ? 'want' : 'goods'}}">{{item.targetType === 'want' ? '求购' : '帖子'}}</text>
+        <text class="rep-title">{{item.targetTitle}}</text>
+      </view>
+      <image wx:if="{{item.targetCover}}" class="rep-cover" src="{{item.targetCover}}" mode="aspectFill" data-url="{{item.targetCover}}" bindtap="previewImg" />
+      <view class="rep-info">发布者：{{item.targetNickname || '匿名'}} · {{item.targetCategory || '-'}} · 目标状态：{{item.targetStatus === 'on' ? '在售' : item.targetStatus === 'closed' ? '已结束' : item.targetStatus === 'off' ? '已下架' : '已删'}}</view>
+      <view class="rep-reason">原因：{{item.reason || '(未填原因)'}}</view>
+      <view wx:if="{{item.images.length}}" class="rep-imgs">
+        <image wx:for="{{item.images}}" wx:key="*this" wx:for-item="img" class="rep-img" src="{{img}}" mode="aspectFill" data-url="{{img}}" bindtap="previewImg" />
+      </view>
+      <view class="rep-meta">举报人：{{item._openid}} · {{item.createdAtText}} · {{item.status === 'pending' ? '待处理' : '已处理(' + (item.handleResult === 'off' ? '下架' : item.handleResult === 'delete' ? '删除' : '忽略') + ')'}}</view>
+      <view class="ops">
+        <view wx:if="{{item.status == 'pending'}}" class="op danger" data-id="{{item._id}}" data-result="delete" bindtap="onRepHandle">删除帖</view>
+        <view wx:if="{{item.status == 'pending'}}" class="op danger" data-id="{{item._id}}" data-result="off" bindtap="onRepHandle">下架</view>
+        <view wx:if="{{item.status == 'pending'}}" class="op" data-id="{{item._id}}" data-result="ignore" bindtap="onRepHandle">忽略(恢复)</view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{!repLoading && repList.length === 0}}" class="empty">暂无举报记录</view>
+  <view wx:if="{{repLoading}}" class="loading">加载中…</view>
+  </block>
+
+  <!-- ===== 认证管理 ===== -->
+  <block wx:else>
+  <view class="filter-bar">
+    <view
+      wx:for="{{authFilters}}"
+      wx:key="key"
+      class="filter {{authStatus === item.key ? 'active' : ''}}"
+      data-status="{{item.key}}"
+      bindtap="onAuthStatusTap"
+    >{{item.label}}</view>
+  </view>
+  <view class="list">
+    <view wx:for="{{authList}}" wx:key="_id" class="card auth-card">
+      <image wx:if="{{item.avatar}}" class="cover" src="{{item.avatar}}" mode="aspectFill" />
+      <view wx:else class="cover no-img">👤</view>
+      <view class="body">
+        <view class="title">{{item.nickname || '匿名'}}</view>
+        <view class="sub openid">{{item._openid}}</view>
+        <view class="meta">
+          <text class="student-id">学号: {{item.studentId || '未填'}}</text>
+          <text class="status-badge auth {{item.verified}}">{{item.verified === 'approved' ? '🎓已认证' : item.verified === 'pending' ? '审核中' : item.verified === 'rejected' ? '未通过' : '未认证'}}</text>
+        </view>
+        <view class="ops">
+          <view wx:if="{{item.verified !== 'approved'}}" class="op" data-id="{{item._id}}" data-status="approved" bindtap="onAuthApprove">通过</view>
+          <view wx:if="{{item.verified !== 'rejected'}}" class="op danger" data-id="{{item._id}}" data-status="rejected" bindtap="onAuthReject">拒绝</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{!authLoading && authList.length === 0}}" class="empty">暂无认证记录</view>
+  <view wx:if="{{authLoading}}" class="loading">加载中…</view>
+  </block>
+</view>

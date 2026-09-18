@@ -1,0 +1,12 @@
+<!-- pages/agreement/agreement.wxml：用户服务协议 & 隐私政策 -->
+<view class="page">
+  <view class="doc-title">{{title}}</view>
+  <view class="doc-update">更新日期：2026年8月15日</view>
+
+  <view class="section" wx:for="{{sections}}" wx:key="h">
+    <view class="sec-h">{{item.h}}</view>
+    <text class="sec-p" user-select>{{item.p}}</text>
+  </view>
+
+  <view class="doc-footer">以上内容，用户阅读并同意后即可开始使用本平台。</view>
+</view>

@@ -1,0 +1,69 @@
+<!-- pages/want/want.wxml：求购列表 -->
+<view class="page">
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <input class="search-input" placeholder="搜索想求购的东西…" value="{{keyword}}" confirm-type="search" bindinput="onSearchInput" bindconfirm="onSearch" />
+      <view wx:if="{{keyword}}" class="search-clear" bindtap="clearSearch">✕</view>
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 分类筛选 -->
+  <scroll-view class="cat-bar" scroll-x>
+    <view
+      wx:for="{{categories}}"
+      wx:key="*this"
+      class="cat-item {{activeCat === item ? 'active' : ''}}"
+      data-cat="{{item}}"
+      bindtap="onCatTap"
+    >{{item}}</view>
+  </scroll-view>
+
+  <!-- 求购列表 -->
+  <view class="list">
+    <view wx:for="{{list}}" wx:key="_id" class="card" data-id="{{item._id}}" bindtap="goDetail">
+      <view class="card-head">
+        <view class="want-tag">求购</view>
+        <text class="card-title">{{item.title}}</text>
+      </view>
+      <view class="card-desc">{{item.desc}}</view>
+      <view class="card-meta">
+        <text class="tag">{{item.category}}</text>
+        <text class="stat">👁 {{item.viewCount}}</text>
+        <text class="stat">💬 {{item.replyCount}}人回应</text>
+      </view>
+      <view class="card-foot">
+        <text class="seller">{{item.nickname || '匿名'}}<text wx:if="{{item.verified === 'approved'}}" class="verified-badge">🎓</text></text>
+        <text class="time">{{item.timeText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：首次加载 -->
+  <view wx:if="{{loading && list.length === 0}}" class="skeleton-list">
+    <view wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this" class="sk-card">
+      <view class="sk-row1">
+        <view class="sk-line sk-tag"></view>
+        <view class="sk-line sk-title"></view>
+      </view>
+      <view class="sk-line sk-desc"></view>
+      <view class="sk-row2">
+        <view class="sk-line sk-cat"></view>
+        <view class="sk-line sk-stat"></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view class="empty-icon">🔍</view>
+    <view class="empty-text">还没有求购，来发布第一个需求吧</view>
+    <view class="empty-btn" bindtap="goPublish">＋ 发布求购</view>
+  </view>
+  <view wx:if="{{finished && list.length > 0}}" class="list-end">— 到底啦 —</view>
+  <view wx:if="{{loading && list.length > 0}}" class="list-loading">加载中…</view>
+
+  <!-- 悬浮发布求购按钮 -->
+  <view class="fab" bindtap="goPublish">＋</view>
+</view>

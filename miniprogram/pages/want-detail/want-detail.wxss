@@ -1,0 +1,60 @@
+.page { background: #f5f5f5; min-height: 100vh; padding-bottom: 60rpx; }
+
+.info { background: #fff; padding: 24rpx 30rpx; }
+.head { display: flex; align-items: center; }
+.want-tag { background: #ffd54f; color: #795548; font-size: 20rpx; padding: 4rpx 14rpx; border-radius: 12rpx; margin-right: 12rpx; }
+.status-badge { font-size: 20rpx; padding: 4rpx 14rpx; border-radius: 12rpx; background: #e8f5e9; color: #2e7d32; }
+.status-badge.closed { background: #f0f0f0; color: #999; }
+.title { font-size: 36rpx; font-weight: 700; margin-top: 16rpx; line-height: 1.4; }
+.meta { display: flex; align-items: center; margin-top: 12rpx; }
+.tag { font-size: 22rpx; color: #7C6BC0; background: #f4f1fb; padding: 4rpx 16rpx; border-radius: 16rpx; margin-right: 16rpx; }
+.stat { font-size: 22rpx; color: #999; margin-right: 16rpx; }
+.desc { font-size: 28rpx; color: #444; margin-top: 20rpx; line-height: 1.7; }
+.publisher { font-size: 22rpx; color: #999; margin-top: 16rpx; }
+
+.contact-card { background: #f4f1fb; margin: 20rpx 24rpx; padding: 20rpx; border-radius: 16rpx; }
+.contact-title { font-size: 24rpx; color: #7C6BC0; margin-bottom: 10rpx; }
+.contact-row { display: flex; align-items: center; justify-content: center; padding: 8rpx 0; }
+.contact-value { flex: 1; font-size: 28rpx; color: #333; font-weight: 600; text-align: center; }
+.contact-mask { flex: 1; font-size: 28rpx; color: #5c4d9e; font-weight: 600; text-align: center; }
+.copy { font-size: 24rpx; color: #7C6BC0; padding: 4rpx 16rpx; border: 1rpx solid #d9d2f0; border-radius: 16rpx; }
+
+.replies { padding: 20rpx 24rpx; }
+.section-title { font-size: 28rpx; font-weight: 600; margin-bottom: 16rpx; color: #333; }
+.no-reply { text-align: center; color: #999; font-size: 24rpx; padding: 40rpx 0; background: #fff; border-radius: 16rpx; }
+.reply-card { background: #fff; border-radius: 16rpx; padding: 20rpx; margin-bottom: 16rpx; }
+.reply-name { font-size: 26rpx; font-weight: 600; color: #7C6BC0; }
+.reply-desc { font-size: 26rpx; color: #444; margin-top: 8rpx; line-height: 1.5; }
+.reply-contact { display: flex; align-items: center; justify-content: center; margin-top: 12rpx; font-size: 26rpx; color: #5c4d9e; background: #f8f8f8; padding: 10rpx 16rpx; border-radius: 12rpx; }
+.reply-contact .copy { margin-left: 12rpx; }
+.reply-time { font-size: 22rpx; color: #aaa; margin-top: 10rpx; }
+
+.mine-ops { padding: 20rpx 24rpx; }
+.op-btn { background: #7C6BC0; color: #fff; font-size: 30rpx; border-radius: 40rpx; padding: 20rpx 0; }
+
+.reply-form { padding: 20rpx 24rpx; background: #fff; margin: 0 24rpx; border-radius: 16rpx; }
+.reply-textarea { width: 100%; font-size: 26rpx; min-height: 120rpx; background: #f8f8f8; border-radius: 12rpx; padding: 16rpx; box-sizing: border-box; }
+.reply-contact-input { width: 100%; height: 88rpx; min-height: 88rpx; font-size: 26rpx; line-height: 56rpx; background: #f8f8f8; border-radius: 12rpx; padding: 16rpx; margin-top: 16rpx; box-sizing: border-box; display: block; }
+.reply-btn { margin-top: 20rpx; background: #7C6BC0; color: #fff; font-size: 28rpx; border-radius: 36rpx; padding: 16rpx 0; }
+
+.closed-notice { text-align: center; color: #999; font-size: 26rpx; padding: 40rpx 0; }
+.loading { text-align: center; color: #999; font-size: 26rpx; padding: 200rpx 0; }
+
+/* 已认证标识（淡紫底包边） */
+.verified-badge {
+  margin-left: 6rpx; font-size: 22rpx; line-height: 1;
+  background: #EFEBF9; color: #7C6BC0;
+  border: 1rpx solid #d9d2f0; border-radius: 10rpx;
+  padding: 4rpx 8rpx; display: inline-block;
+}
+
+/* 联系方式类型选择（回应表单） */
+.contact-type { display: flex; margin-top: 16rpx; }
+.ctype-tag {
+  padding: 10rpx 32rpx; margin-right: 16rpx;
+  font-size: 26rpx; color: #7C6BC0; background: #f4f1fb;
+  border: 2rpx solid #d9d2f0; border-radius: 28rpx;
+}
+.ctype-tag.active { background: #7C6BC0; color: #fff; border-color: #7C6BC0; font-weight: 600; }
+
+.report-entry { text-align: center; font-size: 24rpx; color: #bbb; padding: 16rpx 0 40rpx; }

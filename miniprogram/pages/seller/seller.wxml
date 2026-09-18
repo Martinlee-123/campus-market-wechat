@@ -1,0 +1,72 @@
+<!-- pages/seller/seller.wxml -->
+<view class="page">
+
+  <!-- 卖家资料头部 -->
+  <view class="seller-head">
+    <image wx:if="{{seller.avatar}}" class="avatar" src="{{seller.avatar}}" mode="aspectFill" />
+    <view wx:else class="avatar placeholder">👤</view>
+    <view class="head-right">
+      <view class="head-name">
+        {{seller.nickname}}<text wx:if="{{seller.verified === 'approved'}}" class="verified-badge">🎓</text>
+      </view>
+      <view class="head-flowers">🌸 收到 {{seller.flowerReceived}} 朵小花</view>
+    </view>
+    <!-- 拉黑按钮：仅看别人主页显示，自己主页不显示 -->
+    <view wx:if="{{!selfMode}}" class="block-btn {{blocked ? 'blocked' : ''}}" bindtap="toggleBlock">{{blocked ? '已拉黑' : '拉黑'}}</view>
+  </view>
+
+  <!-- 在售商品标题 -->
+  <view class="section-title">在售商品（{{list.length}}）</view>
+
+  <!-- 商品列表 -->
+  <view class="list">
+    <view
+      wx:for="{{list}}"
+      wx:key="_id"
+      class="card"
+      data-id="{{item._id}}"
+      bindtap="goDetail"
+    >
+      <image wx:if="{{item.cover}}" class="cover" src="{{item.cover}}" mode="aspectFill" lazy-load />
+      <view wx:else class="cover no-img">📄</view>
+      <view class="card-body">
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-desc">{{item.desc}}</view>
+        <view class="card-meta">
+          <text wx:if="{{item.priceType === 'free'}}" class="price">免费</text>
+          <text wx:elif="{{item.priceType === 'bargain'}}" class="price">可议价</text>
+          <text wx:else class="price">¥{{item.price}}</text>
+          <text class="tag {{item.tradeStatus === 'sold' ? 'sold' : ''}}">{{item.tradeStatus === 'sold' ? '已出' : item.tradeStatus === 'pending' ? '进行中' : item.category}}</text>
+        </view>
+        <view class="card-foot">
+          <text wx:if="{{item.flowerCount > 0}}" class="stat flower">🌸 {{item.flowerCount}}</text>
+          <text class="stat">👁 {{item.viewCount}}</text>
+          <text class="stat">⭐ {{item.likeCount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：列表中无数据且加载中 -->
+  <view wx:if="{{loading && list.length === 0}}" class="skeleton-list">
+    <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="skeleton-card">
+      <view class="sk-cover"></view>
+      <view class="sk-body">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-desc"></view>
+        <view class="sk-row">
+          <view class="sk-line sk-price"></view>
+          <view class="sk-line sk-tag"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空态 -->
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view class="empty-icon">🛒</view>
+    <view class="empty-text">{{selfMode ? '你还没有在售商品，去发布第一件吧' : '这位卖家暂时没有在售商品'}}</view>
+  </view>
+
+  <view wx:if="{{loading && list.length > 0}}" class="loading">加载中…</view>
+</view>

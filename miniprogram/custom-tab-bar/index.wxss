@@ -1,0 +1,29 @@
+/* 自定义 tabBar 样式：放大字号 + 间隔 + 高导航 */
+.tab-bar {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center;
+  background: #ffffff; height: 110rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  z-index: 100;
+}
+.tab-item {
+  flex: 1; height: 110rpx;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  /* 功能间隔：每个 tab 占 flex 等分，天然有间隔 */
+}
+.tab-icon { width: 52rpx; height: 52rpx; }
+.tab-text {
+  font-size: 26rpx; color: #999999;
+  margin-top: 6rpx; line-height: 1;
+}
+.tab-item.active .tab-text { color: #7C6BC0; font-weight: 700; }
+
+.icon-wrap { position: relative; }
+.tab-bar .badge {
+  position: absolute; top: -8rpx; right: -18rpx;
+  min-width: 32rpx; height: 32rpx; padding: 0 8rpx;
+  background: #e53935; color: #fff; font-size: 20rpx;
+  border-radius: 18rpx; text-align: center; line-height: 32rpx;
+}

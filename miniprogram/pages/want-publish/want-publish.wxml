@@ -1,0 +1,36 @@
+<!-- pages/want-publish/want-publish.wxml：发布求购 -->
+<view class="page">
+  <view class="form">
+
+    <view class="row">
+      <view class="label">求购内容 <text class="req">*</text></view>
+      <input class="input" placeholder="如：求《高数》下册教材" value="{{title}}" bindinput="onTitle" maxlength="30" />
+    </view>
+
+    <view class="row">
+      <view class="label">分类 <text class="req">*</text></view>
+      <picker range="{{categories}}" value="{{categoryIndex}}" bindchange="onCatChange">
+        <view class="picker-value">{{categories[categoryIndex]}} ▾</view>
+      </picker>
+    </view>
+
+    <view class="row">
+      <view class="label">补充说明 <text class="req">*</text></view>
+      <textarea class="textarea" placeholder="说明你想要的具体情况：新旧程度、预算、教材版本、交易方式等…" value="{{desc}}" bindinput="onDesc" maxlength="500" auto-height />
+    </view>
+
+    <view class="row">
+      <view class="label">联系方式 <text class="req">*</text></view>
+      <view class="contact-type">
+        <view class="ctype-tag {{contactType === '微信' ? 'active' : ''}}" data-type="微信" bindtap="onContactTypeTap">💬 微信</view>
+        <view class="ctype-tag {{contactType === 'QQ' ? 'active' : ''}}" data-type="QQ" bindtap="onContactTypeTap">🐧 QQ</view>
+      </view>
+      <input class="input" placeholder="填写你的{{contactType}}账号" value="{{contact}}" bindinput="onContact" maxlength="40" />
+    </view>
+
+  </view>
+
+  <view class="tip">⚠️ 有人回应后，会在你的求购帖子下方显示提供者信息，可直接联系。</view>
+
+  <button class="submit-btn" bindtap="submit" loading="{{submitting}}">发布求购</button>
+</view>

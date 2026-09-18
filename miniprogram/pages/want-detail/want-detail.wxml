@@ -1,0 +1,66 @@
+<!-- pages/want-detail/want-detail.wxml：求购详情 -->
+<view class="page" wx:if="{{item}}">
+
+  <view class="info">
+    <view class="head">
+      <view class="want-tag">求购</view>
+      <view class="status-badge {{item.status === 'closed' ? 'closed' : ''}}">{{item.status === 'closed' ? '已结束' : '求购中'}}</view>
+    </view>
+    <view class="title">{{item.title}}</view>
+    <view class="meta">
+      <text class="tag">{{item.category}}</text>
+      <text class="stat">👁 {{item.viewCount}}</text>
+      <text class="stat">💬 {{item.replyCount}}人回应</text>
+    </view>
+    <view class="desc">{{item.desc}}</view>
+    <view class="publisher">发布者：{{item.nickname || '匿名'}}<text wx:if="{{item.verified === 'approved'}}" class="verified-badge">🎓</text> · {{item.timeText}}</view>
+  </view>
+
+  <!-- 求购者联系方式（点击复制到剪贴板，不外显） -->
+  <view class="contact-card">
+    <view class="contact-title">求购者联系方式</view>
+    <view class="contact-row" bindtap="copyContact">
+      <text wx:if="{{item.isMine}}" class="contact-value">{{item.contactType === 'QQ' ? 'QQ' : '微信'}}：{{item.contact}}</text>
+      <text wx:else class="contact-mask">点击复制{{item.contactType === 'QQ' ? 'QQ' : '微信'}}</text>
+      <text class="copy">📋</text>
+    </view>
+  </view>
+
+  <!-- 回应列表 -->
+  <view class="replies">
+    <view class="section-title">提供者回应（{{item.replies.length}}）</view>
+    <view wx:if="{{item.replies.length === 0}}" class="no-reply">还没有人回应</view>
+    <view wx:for="{{item.replies}}" wx:key="_id" class="reply-card">
+      <view class="reply-name">{{item.nickname || '匿名'}}<text wx:if="{{item.verified === 'approved'}}" class="verified-badge">🎓</text></view>
+      <view class="reply-desc">{{item.desc}}</view>
+      <view class="reply-contact" data-rid="{{item._id}}" bindtap="copyReplyContact">
+        <text class="contact-mask">点击复制{{item.contactType === 'QQ' ? 'QQ' : '微信'}}</text>
+        <text class="copy">📋</text>
+      </view>
+      <view class="reply-time">{{item.timeText}}</view>
+    </view>
+  </view>
+
+  <!-- 本人操作 -->
+  <view wx:if="{{item.isMine}}" class="mine-ops">
+    <button class="op-btn" bindtap="toggleStatus">{{item.status === 'open' ? '结束求购' : '重新开启'}}</button>
+  </view>
+
+  <!-- 其他用户：我要提供（自己也可补充说明） -->
+  <view class="reply-form" wx:if="{{item.status === 'open'}}">
+    <view class="section-title">🔔 我有这个东西，我要提供</view>
+    <textarea class="reply-textarea" placeholder="说明你能提供什么（版本、成色、价格等）…" value="{{replyDesc}}" bindinput="onReplyDesc" maxlength="300" auto-height cursor-spacing="140" />
+    <view class="contact-type">
+      <view class="ctype-tag {{replyContactType === '微信' ? 'active' : ''}}" data-type="微信" bindtap="onReplyContactTypeTap">💬 微信</view>
+      <view class="ctype-tag {{replyContactType === 'QQ' ? 'active' : ''}}" data-type="QQ" bindtap="onReplyContactTypeTap">🐧 QQ</view>
+    </view>
+    <input class="reply-contact-input" placeholder="填写你的{{replyContactType}}账号" value="{{replyContact}}" bindinput="onReplyContact" maxlength="40" cursor-spacing="140" />
+    <button class="reply-btn" bindtap="submitReply" loading="{{replying}}">提交回应</button>
+  </view>
+
+  <view wx:if="{{item.status === 'closed' && !item.isMine}}" class="closed-notice">该求购已结束</view>
+
+  <view class="report-entry" bindtap="goReport">举报此内容</view>
+</view>
+
+<view wx:else class="loading">{{loading ? '加载中…' : '求购不存在或已删除'}}</view>

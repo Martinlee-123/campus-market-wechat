@@ -1,0 +1,41 @@
+<!-- pages/report/report.wxml：举报页 -->
+<view class="page">
+  <view class="card">
+    <view class="label">举报原因（必选其一，或填写其他）</view>
+    <view class="reasons">
+      <view
+        wx:for="{{reasons}}"
+        wx:key="*this"
+        class="reason {{selectedReason === item ? 'active' : ''}}"
+        data-reason="{{item}}"
+        bindtap="onReasonTap"
+      >{{item}}</view>
+    </view>
+    <textarea
+      class="custom"
+      placeholder="补充说明（可选）…"
+      value="{{customReason}}"
+      bindinput="onCustomInput"
+      maxlength="200"
+      auto-height
+    />
+  </view>
+
+  <view class="card">
+    <view class="label">附加图片（可选，最多4张）</view>
+    <view class="img-grid">
+      <view wx:for="{{images}}" wx:key="*this" class="img-item">
+        <image class="img" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewImage" />
+        <view class="del" data-index="{{index}}" bindtap="removeImage">×</view>
+      </view>
+      <view wx:if="{{images.length < 4}}" class="add" bindtap="chooseImage">
+        <text class="plus">+</text>
+        <text class="add-txt">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="submit" bindtap="submit" loading="{{submitting}}">提交举报</button>
+
+  <view class="tip">我们会对举报内容严格保密，提交后管理员将尽快核实处理。恶意举报可能影响你的账号信誉。</view>
+</view>

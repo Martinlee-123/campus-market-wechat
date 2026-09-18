@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/poster/poster",
+    "pages/publish/publish",
+    "pages/mine/mine",
+    "pages/my-posts/my-posts",
+    "pages/my-favorites/my-favorites",
+    "pages/history/history",
+    "pages/blacklist/blacklist",
+    "pages/edit/edit",
+    "pages/admin/admin",
+    "pages/want/want",
+    "pages/want-publish/want-publish",
+    "pages/want-detail/want-detail",
+    "pages/auth/auth",
+    "pages/report/report",
+    "pages/agreement/agreement",
+    "pages/seller/seller",
+    "pages/chat-list/chat-list",
+    "pages/chat/chat"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#7C6BC0",
+    "navigationBarTitleText": "畅学尼龙",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#7C6BC0",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "逛逛",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_active.png"
+      },
+      {
+        "pagePath": "pages/want/want",
+        "text": "求购",
+        "iconPath": "images/tab_want.png",
+        "selectedIconPath": "images/tab_want_active.png"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布",
+        "iconPath": "images/tab_publish.png",
+        "selectedIconPath": "images/tab_publish_active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tab_mine.png",
+        "selectedIconPath": "images/tab_mine_active.png"
+      },
+      {
+        "pagePath": "pages/chat-list/chat-list",
+        "text": "消息",
+        "iconPath": "images/tab_msg.png",
+        "selectedIconPath": "images/tab_msg_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

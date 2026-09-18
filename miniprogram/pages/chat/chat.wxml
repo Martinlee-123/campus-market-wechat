@@ -1,0 +1,30 @@
+<!-- pages/chat/chat.wxml：聊天窗口 -->
+<view class="page">
+  <view wx:if="{{goodsTitle}}" class="goods-bar">📦 关于：{{goodsTitle}}</view>
+
+  <view class="msg-list">
+    <view wx:if="{{loading}}" class="loading">加载中…</view>
+    <view wx:else>
+      <block wx:for="{{list}}" wx:key="_id">
+        <!-- isMine 在前端渲染前已由 loadHistory 打好标记 -->
+        <view class="row {{item.isMine ? 'mine' : 'other'}}">
+          <view class="bubble">{{item.content}}</view>
+          <view class="time">{{item.timeText}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="input-bar">
+    <input
+      class="input"
+      value="{{input}}"
+      bindinput="onInput"
+      placeholder="输入消息…"
+      confirm-type="send"
+      bindconfirm="send"
+      maxlength="500"
+    />
+    <button class="send-btn" bindtap="send" loading="{{sending}}">发送</button>
+  </view>
+</view>

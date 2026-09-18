@@ -1,0 +1,10 @@
+.page { background: #f5f5f5; min-height: 100vh; padding: 24rpx 30rpx 80rpx; }
+
+.doc-title { font-size: 38rpx; font-weight: 700; text-align: center; color: #333; padding: 24rpx 0 8rpx; }
+.doc-update { font-size: 22rpx; color: #aaa; text-align: center; margin-bottom: 32rpx; }
+
+.section { background: #fff; border-radius: 16rpx; padding: 24rpx; margin-bottom: 20rpx; }
+.sec-h { font-size: 30rpx; font-weight: 600; color: #7C6BC0; margin-bottom: 12rpx; }
+.sec-p { font-size: 26rpx; color: #444; line-height: 1.8; white-space: pre-wrap; display: block; }
+
+.doc-footer { text-align: center; font-size: 22rpx; color: #999; margin-top: 24rpx; }

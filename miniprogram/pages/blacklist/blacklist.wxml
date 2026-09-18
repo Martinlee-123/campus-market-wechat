@@ -1,0 +1,36 @@
+<!-- pages/blacklist/blacklist.wxml：我的黑名单管理 -->
+<view class="page">
+
+  <view class="tip">被拉黑的用户，其发布的商品、求购、主页都将对你隐藏。拉黑后对方无法看到你发出的任何互动。</view>
+
+  <view class="list">
+    <view wx:for="{{list}}" wx:key="targetOpenid" class="row">
+      <image wx:if="{{item.avatar}}" class="avatar" src="{{item.avatar}}" mode="aspectFill" lazy-load />
+      <view wx:else class="avatar placeholder">👤</view>
+      <view class="info">
+        <view class="name">
+          {{item.nickname}}<text wx:if="{{item.verified === 'approved'}}" class="verified">🎓</text>
+        </view>
+        <view class="time">拉黑于 {{item.timeText}}</view>
+      </view>
+      <view class="unblock" data-openid="{{item.targetOpenid}}" data-nick="{{item.nickname}}" bindtap="unblock">取消拉黑</view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：首次加载 -->
+  <view wx:if="{{loading && list.length === 0}}" class="skeleton">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="sk-row">
+      <view class="sk-avatar"></view>
+      <view class="sk-line sk-name"></view>
+    </view>
+  </view>
+
+  <!-- 空态 -->
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view class="empty-icon">🛡</view>
+    <view class="empty-text">黑名单是空的</view>
+    <view class="empty-sub">在别人主页点「拉黑」即可屏蔽对方</view>
+  </view>
+
+  <view wx:if="{{loading && list.length > 0}}" class="loading">加载中…</view>
+</view>

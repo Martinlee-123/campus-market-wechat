@@ -1,0 +1,73 @@
+.page { background: #f5f5f5; min-height: 100vh; padding-bottom: 40rpx; }
+
+/* 统计卡片 */
+.stats { display: flex; padding: 24rpx; background: #7C6BC0; }
+.stat-card { flex: 1; text-align: center; color: #fff; }
+.stat-card .num { font-size: 40rpx; font-weight: 700; }
+.stat-card .lb { font-size: 22rpx; opacity: 0.85; margin-top: 4rpx; }
+.stat-card .num.green { color: #b9f6ca; }
+.stat-card .num.grey { color: #e0e0e0; }
+.stat-card .num.red { color: #ffcdd2; }
+.stat-card .num.purple { color: #ffd7ff; }
+
+/* 搜索 + 筛选 */
+.toolbar { display: flex; padding: 20rpx 24rpx; background: #fff; align-items: center; }
+.toolbar .search { flex: 1; background: #f0f0f0; border-radius: 32rpx; padding: 12rpx 24rpx; font-size: 26rpx; }
+.toolbar .btn { margin-left: 16rpx; background: #7C6BC0; color: #fff; padding: 12rpx 30rpx; border-radius: 32rpx; font-size: 26rpx; }
+
+.filter-bar { display: flex; padding: 16rpx 24rpx; background: #fff; }
+.filter { margin-right: 20rpx; padding: 8rpx 24rpx; font-size: 24rpx; color: #666; background: #f0f0f0; border-radius: 24rpx; }
+.filter.active { background: #7C6BC0; color: #fff; }
+
+/* 列表 */
+.list { padding: 20rpx 24rpx; }
+.card { display: flex; background: #fff; border-radius: 16rpx; padding: 20rpx; margin-bottom: 16rpx; }
+.cover { width: 140rpx; height: 140rpx; border-radius: 12rpx; margin-right: 20rpx; background: #eee; flex-shrink: 0; }
+.cover.no-img { display: flex; align-items: center; justify-content: center; font-size: 48rpx; }
+.body { flex: 1; min-width: 0; }
+.title { font-size: 30rpx; font-weight: 600; line-height: 1.4; }
+.meta { display: flex; align-items: center; margin-top: 8rpx; }
+.price { color: #e53935; font-size: 28rpx; font-weight: 600; margin-right: 12rpx; }
+.status-badge { font-size: 20rpx; padding: 4rpx 14rpx; border-radius: 16rpx; }
+.status-badge.on { background: #e8f5e9; color: #2e7d32; }
+.status-badge.off { background: #fff3e0; color: #e65100; }
+.status-badge.deleted { background: #ffebee; color: #c62828; }
+.sub { font-size: 22rpx; color: #999; margin-top: 6rpx; }
+
+/* 操作按钮 */
+.ops { display: flex; margin-top: 12rpx; }
+.op { font-size: 24rpx; color: #7C6BC0; margin-right: 20rpx; padding: 6rpx 20rpx; border: 1rpx solid #d9d2f0; border-radius: 20rpx; }
+.op.danger { color: #e53935; border-color: #ffcdd2; }
+
+.empty, .loading, .end { text-align: center; color: #999; font-size: 24rpx; padding: 40rpx 0; }
+
+/* 顶部导航 */
+.top-nav { display: flex; background: #fff; padding: 16rpx 24rpx; }
+.nav-item { flex: 1; text-align: center; padding: 14rpx 0; font-size: 28rpx; color: #666; border-radius: 12rpx; }
+.nav-item.active { background: #7C6BC0; color: #fff; font-weight: 600; }
+.nav-item + .nav-item { margin-left: 16rpx; }
+.stats { padding-top: 0; }
+
+/* 认证列表 */
+.student-id { font-size: 26rpx; color: #c62828; font-weight: 600; margin-right: 12rpx; }
+.status-badge.auth.approved { background: #e8f5e9; color: #2e7d32; }
+.status-badge.auth.rejected { background: #ffebee; color: #c62828; }
+.status-badge.auth.pending { background: #fff3e0; color: #e65100; }
+.openid { font-size: 20rpx; color: #aaa; word-break: break-all; }
+
+/* 举报管理 */
+.rep-stats { display: flex; padding: 16rpx 24rpx; background: #fff; }
+.rep-stat { flex: 1; text-align: center; font-size: 24rpx; color: #999; }
+.rep-num { font-size: 40rpx; font-weight: 700; color: #7C6BC0; margin-right: 6rpx; }
+.rep-card { flex-direction: column; }
+.rep-head { display: flex; align-items: center; margin-bottom: 8rpx; }
+.rep-type { font-size: 20rpx; padding: 4rpx 14rpx; border-radius: 16rpx; margin-right: 12rpx; }
+.rep-type.goods { background: #EFEBF9; color: #7C6BC0; }
+.rep-type.want { background: #fff3e0; color: #e65100; }
+.rep-title { font-size: 28rpx; font-weight: 600; color: #333; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rep-cover { width: 100%; height: 260rpx; border-radius: 12rpx; margin-bottom: 12rpx; background: #eee; }
+.rep-info { font-size: 22rpx; color: #888; margin-bottom: 6rpx; }
+.rep-reason { font-size: 26rpx; color: #333; margin-bottom: 8rpx; }
+.rep-imgs { display: flex; flex-wrap: wrap; margin-bottom: 8rpx; }
+.rep-img { width: 150rpx; height: 150rpx; border-radius: 10rpx; margin: 0 12rpx 12rpx 0; background: #eee; }
+.rep-meta { font-size: 20rpx; color: #aaa; word-break: break-all; }

@@ -1,0 +1,21 @@
+.page { background: #f5f5f5; min-height: 100vh; padding: 24rpx 24rpx 60rpx; }
+
+.card { background: #fff; border-radius: 16rpx; padding: 24rpx; margin-bottom: 24rpx; }
+.label { font-size: 26rpx; color: #333; font-weight: 600; margin-bottom: 20rpx; }
+
+.reasons { display: flex; flex-wrap: wrap; }
+.reason { padding: 12rpx 28rpx; font-size: 26rpx; color: #666; background: #f0f0f0; border-radius: 24rpx; margin: 0 16rpx 16rpx 0; }
+.reason.active { background: #7C6BC0; color: #fff; }
+
+.custom { width: 100%; min-height: 120rpx; background: #f7f7f7; border-radius: 12rpx; padding: 16rpx; font-size: 26rpx; box-sizing: border-box; margin-top: 8rpx; }
+
+.img-grid { display: flex; flex-wrap: wrap; }
+.img-item { width: 150rpx; height: 150rpx; margin: 0 16rpx 16rpx 0; position: relative; }
+.img { width: 100%; height: 100%; border-radius: 12rpx; }
+.img-item .del { position: absolute; top: -14rpx; right: -14rpx; width: 40rpx; height: 40rpx; background: rgba(0,0,0,0.6); color: #fff; border-radius: 50%; text-align: center; line-height: 36rpx; font-size: 28rpx; }
+.add { width: 150rpx; height: 150rpx; background: #f0f0f0; border-radius: 12rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; }
+.add .plus { font-size: 48rpx; line-height: 1; }
+.add .add-txt { font-size: 22rpx; margin-top: 8rpx; }
+
+.submit { background: #7C6BC0; color: #fff; font-size: 30rpx; border-radius: 44rpx; margin-top: 8rpx; }
+.tip { font-size: 22rpx; color: #aaa; text-align: center; margin-top: 24rpx; line-height: 1.6; }

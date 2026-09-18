@@ -1,0 +1,39 @@
+/* pages/edit/edit.wxss */
+.page { background: #f5f5f5; min-height: 100vh; padding: 24rpx; }
+.form { background: #fff; border-radius: 16rpx; padding: 8rpx 24rpx 40rpx; }
+.field { padding: 24rpx 0; border-bottom: 1rpx solid #f0f0f0; }
+.field .label { font-size: 26rpx; color: #999; margin-bottom: 12rpx; }
+.input { font-size: 30rpx; color: #333; }
+.textarea { font-size: 30rpx; color: #333; width: 100%; min-height: 120rpx; }
+.picker { font-size: 30rpx; color: #333; }
+.subcat-picker { display: flex; flex-wrap: wrap; }
+.subcat-tag {
+  padding: 10rpx 28rpx; margin: 0 16rpx 16rpx 0;
+  font-size: 24rpx; color: #777; background: #fff;
+  border: 1rpx solid #e5e1f2; border-radius: 26rpx;
+}
+.subcat-tag.active { background: #7C6BC0; color: #fff; border-color: #7C6BC0; font-weight: 600; }
+.submit {
+  margin-top: 48rpx; background: #7C6BC0; color: #fff;
+  font-size: 32rpx; border-radius: 40rpx;
+}
+.loading { text-align: center; color: #999; padding: 200rpx 0; }
+
+/* 价格快捷项 */
+.price-quick { display: flex; flex-wrap: wrap; align-items: center; margin-top: 16rpx; }
+.price-tag {
+  padding: 10rpx 28rpx; margin: 0 16rpx 16rpx 0;
+  font-size: 26rpx; color: #7C6BC0; background: #f4f1fb;
+  border: 2rpx solid #d9d2f0; border-radius: 28rpx;
+}
+.price-tag.active { background: #7C6BC0; color: #fff; border-color: #7C6BC0; font-weight: 600; }
+.price-tip { font-size: 22rpx; color: #aaa; width: 100%; }
+
+/* 联系方式类型选择 */
+.contact-type { display: flex; margin-top: 8rpx; }
+.ctype-tag {
+  padding: 10rpx 32rpx; margin-right: 16rpx;
+  font-size: 26rpx; color: #7C6BC0; background: #f4f1fb;
+  border: 2rpx solid #d9d2f0; border-radius: 28rpx;
+}
+.ctype-tag.active { background: #7C6BC0; color: #fff; border-color: #7C6BC0; font-weight: 600; }

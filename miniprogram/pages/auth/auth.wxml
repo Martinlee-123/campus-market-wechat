@@ -1,0 +1,35 @@
+<!-- pages/auth/auth.wxml：校内认证（学号自动审核） -->
+<view class="page">
+  <view class="card">
+    <view class="icon">🎓</view>
+    <view class="title">校内认证</view>
+    <view class="subtitle">输入本校学号，系统自动校验真伪。认证后你的发布与求购会显示🎓标识，更受同学信任。不认证也不影响正常使用。</view>
+
+    <!-- 认证状态 -->
+    <view class="status-box">
+      <view wx:if="{{verified === 'approved'}}" class="status verified">✅ 已认证（🎓 已显示在你的帖子旁）</view>
+      <view wx:elif="{{verified === 'pending'}}" class="status pending">⏳ 审核中</view>
+      <view wx:elif="{{verified === 'rejected'}}" class="status rejected">✖ 未通过，请重新提交</view>
+      <view wx:else class="status">未认证</view>
+    </view>
+
+    <!-- 认证表单（未认证/未通过时显示） -->
+    <view class="form" wx:if="{{verified !== 'approved' && verified !== 'pending'}}">
+      <view class="row">
+        <view class="label">学号 <text class="req">*</text></view>
+        <input
+          class="input"
+          type="number"
+          maxlength="9"
+          placeholder="请输入9位学号"
+          value="{{studentId}}"
+          bindinput="onStudentId"
+        />
+        <view class="rule" bindtap="showRule">查看学号规则 ℹ️</view>
+      </view>
+      <view class="privacy">🔒 学号仅用于校内认证，审核后仅管理员可见，前端不展示你的学号。</view>
+      <button class="submit-btn" bindtap="submitAuth" loading="{{submitting}}">提交认证</button>
+    </view>
+
+  </view>
+</view>

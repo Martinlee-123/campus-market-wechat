@@ -1,0 +1,74 @@
+.page { background: #f5f5f5; min-height: 100vh; padding-bottom: 200rpx; }
+
+/* 搜索栏 */
+.search-bar { display: flex; align-items: center; padding: 20rpx 24rpx; background: #fff; }
+.search-input-wrap { flex: 1; display: flex; align-items: center; background: #f0f0f0; border-radius: 32rpx; padding: 12rpx 24rpx; }
+.search-input { flex: 1; font-size: 26rpx; }
+.search-clear { color: #bbb; font-size: 26rpx; padding: 0 8rpx; }
+.search-btn { margin-left: 16rpx; background: #7C6BC0; color: #fff; padding: 12rpx 30rpx; border-radius: 32rpx; font-size: 26rpx; }
+
+/* 分类 */
+.cat-bar { display: flex; padding: 16rpx 24rpx; background: #fff; white-space: nowrap; }
+.cat-item { display: inline-block; margin-right: 20rpx; padding: 8rpx 24rpx; font-size: 24rpx; color: #666; background: #f0f0f0; border-radius: 24rpx; }
+.cat-item.active { background: #7C6BC0; color: #fff; }
+
+/* 列表 */
+.list { padding: 20rpx 24rpx; }
+.card { background: #fff; border-radius: 16rpx; padding: 20rpx; margin-bottom: 16rpx; }
+.card-head { display: flex; align-items: center; }
+.want-tag { background: #ffd54f; color: #795548; font-size: 20rpx; padding: 4rpx 14rpx; border-radius: 12rpx; margin-right: 12rpx; flex-shrink: 0; }
+.card-title { font-size: 30rpx; font-weight: 600; }
+.card-desc { font-size: 26rpx; color: #666; margin-top: 10rpx; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-meta { display: flex; align-items: center; margin-top: 12rpx; }
+.tag { font-size: 22rpx; color: #7C6BC0; background: #f4f1fb; padding: 4rpx 16rpx; border-radius: 16rpx; margin-right: 16rpx; }
+.stat { font-size: 22rpx; color: #999; margin-right: 16rpx; }
+.card-foot { display: flex; align-items: center; margin-top: 14rpx; }
+.seller { font-size: 24rpx; color: #666; flex: 1; }
+.time { font-size: 22rpx; color: #aaa; }
+
+.empty { text-align: center; padding: 160rpx 0; }
+.empty-icon { font-size: 80rpx; }
+.empty-text { color: #999; font-size: 26rpx; margin-top: 20rpx; }
+.empty-btn {
+  display: inline-block; margin-top: 40rpx; padding: 16rpx 60rpx;
+  background: #7C6BC0; color: #fff; font-size: 30rpx;
+  border-radius: 40rpx; font-weight: 600;
+}
+.list-end, .list-loading { text-align: center; color: #bbb; font-size: 24rpx; padding: 30rpx 0; }
+
+/* 悬浮发布 */
+.fab {
+  position: fixed; right: 32rpx; bottom: 190rpx;
+  width: 100rpx; height: 100rpx; border-radius: 50%;
+  background: #7C6BC0; color: #fff; font-size: 60rpx;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6rpx 20rpx rgba(124,107,192,0.4);
+}
+
+/* 已认证标识（淡紫底包边） */
+.verified-badge {
+  margin-left: 6rpx; font-size: 22rpx; line-height: 1;
+  background: #EFEBF9; color: #7C6BC0;
+  border: 1rpx solid #d9d2f0; border-radius: 10rpx;
+  padding: 4rpx 8rpx; display: inline-block;
+}
+
+/* 骨架屏（求购列表） */
+.skeleton-list { padding: 20rpx 24rpx; }
+.sk-card {
+  background: #fff; border-radius: 16rpx; padding: 20rpx;
+  margin-bottom: 16rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.sk-row1 { display: flex; align-items: center; }
+.sk-line { background: #e9e9ec; border-radius: 8rpx; }
+.sk-tag { width: 60rpx; height: 28rpx; flex-shrink: 0; margin-right: 12rpx; }
+.sk-title { height: 32rpx; flex: 1; }
+.sk-desc { height: 26rpx; margin-top: 16rpx; width: 90%; }
+.sk-row2 { display: flex; justify-content: space-between; margin-top: 24rpx; }
+.sk-cat { width: 100rpx; height: 28rpx; }
+.sk-stat { width: 160rpx; height: 28rpx; }
+.sk-card .sk-line { animation: sk-blink 1.2s ease-in-out infinite; }
+@keyframes sk-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

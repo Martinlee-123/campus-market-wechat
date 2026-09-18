@@ -1,0 +1,26 @@
+<!-- pages/poster/poster.wxml：商品海报预览 + 保存/转发 -->
+<view class="page">
+
+  <view wx:if="{{loading}}" class="loading">加载中…</view>
+
+  <block wx:elif="{{item}}">
+    <!-- 海报画布（隐藏，只用于生成图片） -->
+    <canvas type="2d" id="posterCanvas" class="poster-canvas"></canvas>
+
+    <!-- 预览区：显示生成的图片 -->
+    <view class="preview-wrap">
+      <image wx:if="{{posterPath}}" class="preview" src="{{posterPath}}" mode="widthFix" show-menu-by-longpress />
+      <view wx:else class="preview placeholder">海报生成中…</view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <button class="btn save" bindtap="savePoster" disabled="{{!posterPath}}">💾 保存到相册</button>
+      <button class="btn share" open-type="share" disabled="{{!posterPath}}">📤 转发给好友</button>
+    </view>
+
+    <view class="tip">提示：长按图片也可保存；保存后可发朋友圈/微信群</view>
+  </block>
+
+  <view wx:else class="loading">内容不存在或已下架</view>
+</view>

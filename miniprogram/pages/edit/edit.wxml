@@ -1,0 +1,81 @@
+<!-- pages/edit/edit.wxml -->
+<view class="page">
+  <view wx:if="{{loading}}" class="loading">加载中…</view>
+
+  <view wx:else class="form">
+    <view class="field">
+      <view class="label">标题</view>
+      <input class="input" placeholder="请输入标题" value="{{title}}" bindinput="onTitle" maxlength="30" />
+    </view>
+
+    <view class="field">
+      <view class="label">描述</view>
+      <textarea class="textarea" placeholder="请输入描述" value="{{desc}}" bindinput="onDesc" maxlength="500" auto-height />
+    </view>
+
+    <view class="field">
+      <view class="label">标签（可选，方便搜索）</view>
+      <input class="input" placeholder="用空格或逗号分隔，最多5个" value="{{tags}}" bindinput="onTags" maxlength="60" />
+    </view>
+
+    <view class="field">
+      <view class="label">分类</view>
+      <picker mode="selector" range="{{categories}}" value="{{categoryIndex}}" bindchange="onCatChange">
+        <view class="picker">{{categories[categoryIndex]}} ▾</view>
+      </picker>
+    </view>
+
+    <view class="field" wx:if="{{subCatList.length > 0}}">
+      <view class="label">二级标题（可选）</view>
+      <view class="subcat-picker">
+        <view class="subcat-tag {{selectedSubCat === '' ? 'active' : ''}}" data-sub="" bindtap="onSubCatTap">不选</view>
+        <view
+          wx:for="{{subCatList}}"
+          wx:key="*this"
+          class="subcat-tag {{selectedSubCat === item ? 'active' : ''}}"
+          data-sub="{{item}}"
+          bindtap="onSubCatTap"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view class="field" wx:if="{{thirdCatList.length > 0}}">
+      <view class="label">学科（可选）</view>
+      <view class="subcat-picker">
+        <view class="subcat-tag {{selectedThirdCat === '' ? 'active' : ''}}" data-t="" bindtap="onThirdCatTap">不选</view>
+        <view
+          wx:for="{{thirdCatList}}"
+          wx:key="*this"
+          class="subcat-tag {{selectedThirdCat === item ? 'active' : ''}}"
+          data-t="{{item}}"
+          bindtap="onThirdCatTap"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">价格</view>
+      <input class="input" type="digit" placeholder="0 为免费" value="{{price}}" bindinput="onPrice" />
+      <view class="price-quick">
+        <view class="price-tag {{priceType === 'free' ? 'active' : ''}}" data-type="free" bindtap="onPriceTypeTap">🎁 免费送</view>
+        <view class="price-tag {{priceType === 'bargain' ? 'active' : ''}}" data-type="bargain" bindtap="onPriceTypeTap">💬 可议价</view>
+        <text class="price-tip">填数字则不选快捷项；选快捷项可不填价格</text>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">联系方式类型</view>
+      <view class="contact-type">
+        <view class="ctype-tag {{contactType === '微信' ? 'active' : ''}}" data-type="微信" bindtap="onContactTypeTap">💬 微信</view>
+        <view class="ctype-tag {{contactType === 'QQ' ? 'active' : ''}}" data-type="QQ" bindtap="onContactTypeTap">🐧 QQ</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">联系方式</view>
+      <input class="input" placeholder="填写你的{{contactType}}账号" value="{{contact}}" bindinput="onContact" />
+    </view>
+
+    <button class="submit" bindtap="submit">保存修改</button>
+  </view>
+</view>

@@ -1,0 +1,17 @@
+<!-- 自定义 tabBar：放大字号 + 间距 + 图标 -->
+<view class="tab-bar">
+  <view
+    class="tab-item {{selected === index ? 'active' : ''}}"
+    wx:for="{{list}}"
+    wx:key="index"
+    data-path="{{item.pagePath}}"
+    data-index="{{index}}"
+    bindtap="switchTab"
+  >
+    <view class="icon-wrap">
+      <image class="tab-icon" src="{{selected === index ? item.selectedIconPath : item.iconPath}}" />
+      <view wx:if="{{item.text === '消息' && unread > 0}}" class="badge">{{unread > 99 ? '99+' : unread}}</view>
+    </view>
+    <view class="tab-text">{{item.text}}</view>
+  </view>
+</view>

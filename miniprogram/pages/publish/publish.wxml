@@ -1,0 +1,124 @@
+<!-- pages/publish/publish.wxml -->
+<view class="page">
+
+  <!-- 草稿状态提示条：有未完成草稿时显示 -->
+  <view wx:if="{{draftActive}}" class="draft-bar">
+    <text class="draft-dot">📝</text>
+    <text class="draft-text">已自动保存草稿</text>
+    <view class="draft-clear" bindtap="clearDraftTap">清空</view>
+  </view>
+
+  <view class="form">
+
+    <view class="row">
+      <view class="label">标题 <text class="req">*</text></view>
+      <input class="input" placeholder="如：考研数学笔记（电子版）" value="{{title}}" bindinput="onTitle" maxlength="30" />
+    </view>
+
+    <view class="row">
+      <view class="label">分类 <text class="req">*</text></view>
+      <picker range="{{categories}}" value="{{categoryIndex}}" bindchange="onCatChange">
+        <view class="picker-value">{{categories[categoryIndex]}} ▾</view>
+      </picker>
+    </view>
+
+    <!-- 二级分类（仅"学习资料"） -->
+    <view class="row" wx:if="{{subCatList.length > 0}}">
+      <view class="label">二级标题 <text class="opt">（可选）</text></view>
+      <view class="subcat-picker">
+        <view
+          class="subcat-tag {{selectedSubCat === '' ? 'active' : ''}}"
+          data-sub=""
+          bindtap="onSubCatTap"
+        >不选</view>
+        <view
+          wx:for="{{subCatList}}"
+          wx:key="*this"
+          class="subcat-tag {{selectedSubCat === item ? 'active' : ''}}"
+          data-sub="{{item}}"
+          bindtap="onSubCatTap"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 三级分类（学科，仅选中某个二级分类后出现） -->
+    <view class="row" wx:if="{{thirdCatList.length > 0}}">
+      <view class="label">学科 <text class="opt">（可选）</text></view>
+      <view class="subcat-picker">
+        <view
+          class="subcat-tag {{selectedThirdCat === '' ? 'active' : ''}}"
+          data-t=""
+          bindtap="onThirdCatTap"
+        >不选</view>
+        <view
+          wx:for="{{thirdCatList}}"
+          wx:key="*this"
+          class="subcat-tag {{selectedThirdCat === item ? 'active' : ''}}"
+          data-t="{{item}}"
+          bindtap="onThirdCatTap"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view class="row col">
+      <view class="label">价格（元）<text class="req">*</text></view>
+      <input class="input" type="digit" placeholder="0 表示免费赠送" value="{{price}}" bindinput="onPrice" />
+      <view class="price-quick">
+        <view
+          class="price-tag {{priceType === 'free' ? 'active' : ''}}"
+          data-type="free"
+          bindtap="onPriceTypeTap"
+        >🎁 免费送</view>
+        <view
+          class="price-tag {{priceType === 'bargain' ? 'active' : ''}}"
+          data-type="bargain"
+          bindtap="onPriceTypeTap"
+        >💬 可议价</view>
+        <text class="price-tip">填数字可不选快捷项；选快捷项可不填价格</text>
+      </view>
+    </view>
+
+    <view class="row">
+      <view class="label">描述 <text class="req">*</text></view>
+      <textarea class="textarea" placeholder="介绍内容、新旧程度、交易方式、校内自提地点…" value="{{desc}}" bindinput="onDesc" maxlength="500" auto-height />
+    </view>
+
+    <view class="row">
+      <view class="label">标签 <text class="opt">（可选，方便搜索）</text></view>
+      <input class="input" placeholder="如：高数、考研、电子版（用空格或逗号分隔，最多5个）" value="{{tags}}" bindinput="onTags" maxlength="60" />
+    </view>
+
+    <view class="row">
+      <view class="label">图片（最多3张）</view>
+      <view class="img-grid">
+        <view wx:for="{{images}}" wx:key="index" class="img-cell">
+          <image class="img" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewImage" />
+          <view class="img-del" data-index="{{index}}" catchtap="removeImage">✕</view>
+        </view>
+        <view wx:if="{{images.length < 3}}" class="img-add" bindtap="chooseImage">＋</view>
+      </view>
+    </view>
+
+    <view class="row col">
+      <view class="label">联系方式 <text class="req">*</text></view>
+      <view class="contact-type">
+        <view
+          class="ctype-tag {{contactType === '微信' ? 'active' : ''}}"
+          data-type="微信"
+          bindtap="onContactTypeTap"
+        >💬 微信</view>
+        <view
+          class="ctype-tag {{contactType === 'QQ' ? 'active' : ''}}"
+          data-type="QQ"
+          bindtap="onContactTypeTap"
+        >🐧 QQ</view>
+      </view>
+      <input class="input" placeholder="填写你的{{contactType}}账号" value="{{contact}}" bindinput="onContact" maxlength="40" />
+    </view>
+
+  </view>
+
+  <view class="tip">⚠️ 校内交易，注意人身与财产安全。建议在校园内当面交易、核验实物。发布内容将经过平台安全检测，请勿发布违规信息。</view>
+
+  <button class="submit-btn" bindtap="submit" loading="{{submitting}}">发 布</button>
+</view>

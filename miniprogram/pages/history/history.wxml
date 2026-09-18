@@ -1,0 +1,33 @@
+<!-- pages/history/history.wxml -->
+<view class="page">
+
+  <!-- 顶部工具条：数量 + 清空 -->
+  <view wx:if="{{list.length > 0}}" class="toolbar">
+    <text class="count">共 {{list.length}} 条浏览记录</text>
+    <text class="clear-all" bindtap="clearAll">清空</text>
+  </view>
+
+  <view class="list">
+    <view wx:for="{{list}}" wx:key="_id" class="card" data-id="{{item._id}}" bindtap="goDetail">
+      <image wx:if="{{item.cover}}" class="cover" src="{{item.cover}}" mode="aspectFill" lazy-load />
+      <view wx:else class="cover no-img">📄</view>
+      <view class="card-body">
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-meta">
+          <text class="price">{{item.priceType === 'free' ? '免费' : item.priceType === 'bargain' ? '可议价' : (item.price === 0 ? '免费' : '¥' + item.price)}}</text>
+          <text class="tag">{{item.tradeStatus === 'sold' ? '已出' : item.tradeStatus === 'pending' ? '进行中' : (item.category)}}{{item.subCategory ? '·' + item.subCategory : ''}}{{item.thirdCategory ? '·' + item.thirdCategory : ''}}</text>
+        </view>
+        <view class="card-foot">
+          <text class="time">{{item.timeText}}</text>
+          <text class="del" catchtap="removeOne" data-id="{{item._id}}">✕ 删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空态 -->
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view class="empty-icon">🕘</view>
+    <view class="empty-text">还没有浏览记录，去逛逛看看感兴趣的商品吧</view>
+  </view>
+</view>

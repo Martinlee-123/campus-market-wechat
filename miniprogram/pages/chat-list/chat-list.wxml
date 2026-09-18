@@ -1,0 +1,34 @@
+<!-- pages/chat-list/chat-list.wxml：消息列表 -->
+<view class="page">
+  <view wx:if="{{loading}}" class="loading">加载中…</view>
+
+  <view wx:elif="{{list.length === 0}}" class="empty">
+    <view class="empty-icon">💬</view>
+    <view class="empty-text">暂无消息</view>
+    <view class="empty-sub">在商品详情页点击「私信卖家」即可开始聊天</view>
+  </view>
+
+  <view wx:else class="list">
+    <view
+      class="conv-item"
+      wx:for="{{list}}"
+      wx:key="conversationId"
+      data-conv="{{item}}"
+      bindtap="openChat"
+    >
+      <view class="avatar-wrap">
+        <image wx:if="{{item.otherAvatar}}" class="avatar" src="{{item.otherAvatar}}" mode="aspectFill" />
+        <view wx:else class="avatar placeholder">👤</view>
+        <view wx:if="{{item.unread > 0}}" class="badge">{{item.unread > 99 ? '99+' : item.unread}}</view>
+      </view>
+      <view class="mid">
+        <view class="name-row">
+          <text class="name">{{item.otherNickname}}</text>
+          <text class="time">{{item.timeText}}</text>
+        </view>
+        <view class="last">{{item.lastMessage || '开始聊天吧'}}</view>
+        <view wx:if="{{item.goodsTitle}}" class="goods-tag">📦 {{item.goodsTitle}}</view>
+      </view>
+    </view>
+  </view>
+</view>

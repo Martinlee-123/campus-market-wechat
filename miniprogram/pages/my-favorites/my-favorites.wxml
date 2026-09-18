@@ -1,0 +1,72 @@
+<!-- pages/my-favorites/my-favorites.wxml -->
+<view class="page">
+
+  <!-- 顶部工具条：普通模式=管理入口；编辑模式=全选/取消 + 数量 -->
+  <view wx:if="{{list.length > 0}}" class="toolbar">
+    <view wx:if="{{!editMode}}" class="tb-left">
+      <text class="count">共 {{list.length}} 件收藏</text>
+    </view>
+    <view wx:else class="tb-left">
+      <text class="count">已选 {{selectedCount}} 件</text>
+    </view>
+    <view class="tb-right">
+      <text wx:if="{{!editMode}}" class="manage-btn" bindtap="toggleEdit">管理</text>
+      <block wx:else>
+        <text class="manage-btn" bindtap="toggleSelectAll">{{allSelected ? '取消全选' : '全选'}}</text>
+      </block>
+    </view>
+  </view>
+
+  <view class="list">
+    <view
+      wx:for="{{list}}"
+      wx:key="_id"
+      class="card {{editMode && selected[item._id] ? 'selected' : ''}}"
+      data-id="{{item._id}}"
+      bindtap="onCardTap"
+    >
+      <!-- 编辑模式勾选圈 -->
+      <view wx:if="{{editMode}}" class="check {{selected[item._id] ? 'checked' : ''}}">
+        <text wx:if="{{selected[item._id]}}">✓</text>
+      </view>
+
+      <image wx:if="{{item.cover}}" class="cover" src="{{item.cover}}" mode="aspectFill" lazy-load />
+      <view wx:else class="cover no-img">📄</view>
+      <view class="card-body">
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-desc">{{item.desc}}</view>
+        <view class="card-meta">
+          <text class="price">{{item.priceType === 'free' ? '免费' : item.priceType === 'bargain' ? '可议价' : item.price === 0 ? '免费' : '¥' + item.price}}</text>
+          <text class="tag">{{item.tradeStatus === 'sold' ? '已出' : item.tradeStatus === 'pending' ? '进行中' : item.category}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：首次加载 -->
+  <view wx:if="{{loading && list.length === 0}}" class="skeleton-list">
+    <view wx:for="{{[1,2,3,4]}}" wx:key="*this" class="skeleton-card">
+      <view class="sk-cover"></view>
+      <view class="sk-body">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-desc"></view>
+        <view class="sk-row"><view class="sk-line sk-price"></view><view class="sk-line sk-tag"></view></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view>♥</view>
+    <view class="empty-text">还没有收藏，看到喜欢的点个收藏吧</view>
+  </view>
+
+  <view wx:if="{{loading && list.length > 0}}" class="loading">加载中…</view>
+
+  <!-- 编辑模式底部批量操作栏 -->
+  <view wx:if="{{editMode}}" class="edit-bar">
+    <view class="edit-bar-inner">
+      <text class="cancel-edit" bindtap="toggleEdit">取消</text>
+      <text class="batch-remove" bindtap="batchRemove">取消收藏（{{selectedCount}}）</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,98 @@
+/* pages/my-favorites/my-favorites.wxss */
+.page { background: #f5f5f5; min-height: 100vh; padding: 20rpx; }
+
+/* 顶部工具条 */
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8rpx 8rpx 20rpx;
+}
+.tb-left { display: flex; align-items: center; }
+.count { font-size: 26rpx; color: #999; }
+.tb-right { display: flex; align-items: center; }
+.manage-btn {
+  font-size: 26rpx; color: #7C6BC0; font-weight: 600;
+  padding: 8rpx 20rpx; background: #EFEBF9; border-radius: 24rpx;
+}
+
+/* 卡片 */
+.card { display: flex; background: #fff; border-radius: 16rpx; padding: 20rpx; margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04); position: relative; }
+.card.selected { background: #F7F5FF; border: 2rpx solid #7C6BC0; }
+/* 编辑模式勾选圈 */
+.check {
+  width: 40rpx; height: 40rpx; border-radius: 50%;
+  border: 2rpx solid #ccc; margin-right: 16rpx;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 50rpx; color: #fff; font-size: 26rpx;
+}
+.check.checked { background: #7C6BC0; border-color: #7C6BC0; }
+.cover { width: 140rpx; height: 140rpx; border-radius: 12rpx; background: #f0f0f0; flex-shrink: 0; }
+.cover.no-img { display: flex; align-items: center; justify-content: center; font-size: 56rpx; color: #ccc; }
+.card-body { flex: 1; margin-left: 20rpx; overflow: hidden; }
+.card-title { font-size: 30rpx; color: #333; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-desc { font-size: 26rpx; color: #888; margin-top: 8rpx;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-meta { display: flex; align-items: center; margin-top: 12rpx; }
+.price { color: #C9971C; font-size: 30rpx; font-weight: 700; }
+.tag { margin-left: auto; font-size: 22rpx; color: #7C6BC0; background: #EFEBF9; padding: 4rpx 16rpx; border-radius: 20rpx; }
+
+/* 底部批量操作栏 */
+.edit-bar {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: #fff; padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  display: flex; justify-content: center;
+  z-index: 10;
+}
+.edit-bar-inner { display: flex; align-items: center; width: 100%; max-width: 600rpx; gap: 20rpx; }
+.cancel-edit {
+  font-size: 28rpx; color: #666; padding: 16rpx 32rpx;
+  border: 1rpx solid #ddd; border-radius: 40rpx;
+}
+.batch-remove {
+  flex: 1; text-align: center; font-size: 28rpx; color: #fff;
+  background: #d9534f; border-radius: 40rpx; padding: 16rpx 0;
+}
+
+.empty { text-align: center; padding: 200rpx 0; color: #bbb; font-size: 60rpx; }
+.empty-text { font-size: 28rpx; color: #999; margin-top: 20rpx; }
+.loading { text-align: center; color: #999; padding: 100rpx 0; }
+
+/* 骨架屏 */
+.skeleton-list { padding: 20rpx 24rpx; }
+.skeleton-card {
+  display: flex; background: #fff; border-radius: 16rpx; padding: 20rpx;
+  margin-bottom: 20rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.sk-cover { width: 160rpx; height: 160rpx; border-radius: 12rpx; background: #e9e9ec; flex-shrink: 0; }
+.sk-body { flex: 1; margin-left: 20rpx; padding-top: 8rpx; }
+.sk-line { background: #e9e9ec; border-radius: 8rpx; }
+.sk-title { width: 70%; height: 32rpx; }
+.sk-desc { width: 90%; height: 26rpx; margin-top: 16rpx; }
+.sk-row { display: flex; justify-content: space-between; align-items: center; margin-top: 28rpx; }
+.sk-price { width: 90rpx; height: 32rpx; }
+.sk-tag { width: 120rpx; height: 28rpx; margin-left: auto; }
+.skeleton-card .sk-line, .skeleton-card .sk-cover {
+  animation: sk-blink 1.2s ease-in-out infinite;
+}
+@keyframes sk-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* 骨架屏 */
+.skeleton-list { padding: 20rpx 24rpx; }
+.skeleton-card {
+  display: flex; background: #fff; border-radius: 16rpx; padding: 20rpx;
+  margin-bottom: 20rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.sk-cover { width: 160rpx; height: 160rpx; border-radius: 12rpx; background: #e9e9ec; flex-shrink: 0; }
+.sk-body { flex: 1; margin-left: 20rpx; padding-top: 8rpx; }
+.sk-line { background: #e9e9ec; border-radius: 8rpx; }
+.sk-title { width: 70%; height: 32rpx; }
+.sk-desc { width: 90%; height: 26rpx; margin-top: 16rpx; }
+.sk-row { display: flex; justify-content: space-between; align-items: center; margin-top: 28rpx; }
+.sk-price { width: 90rpx; height: 32rpx; }
+.sk-tag { width: 120rpx; height: 28rpx; margin-left: auto; }
+.skeleton-card .sk-line, .skeleton-card .sk-cover {
+  animation: sk-blink 1.2s ease-in-out infinite;
+}
+@keyframes sk-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }

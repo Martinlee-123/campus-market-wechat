@@ -1,0 +1,12 @@
+# 统一换行符，避免 Windows CRLF 噪音
+* text=auto
+*.js   text
+*.json text
+*.wxml text
+*.wxss text
+*.md   text
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary

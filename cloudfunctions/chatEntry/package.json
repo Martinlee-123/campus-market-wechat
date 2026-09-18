@@ -1,0 +1,9 @@
+{
+  "name": "chatEntry",
+  "version": "1.0.0",
+  "description": "详情页进入站内私聊：创建会话并返回对方信息",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

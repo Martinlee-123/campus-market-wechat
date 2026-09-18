@@ -1,0 +1,54 @@
+<!-- pages/my-posts/my-posts.wxml -->
+<view class="page">
+  <view class="list">
+    <view wx:for="{{list}}" wx:key="_id" class="card">
+      <image wx:if="{{item.cover}}" class="cover" src="{{item.cover}}" mode="aspectFill" lazy-load />
+      <view wx:else class="cover no-img">📄</view>
+      <view class="card-body">
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-meta">
+          <view class="trade-badge {{item.tradeStatus === 'sold' ? 'sold' : ''}}">
+            {{item.tradeStatus === 'sold' ? '已出' : item.tradeStatus === 'pending' ? '进行中' : '在售'}}
+          </view>
+          <text class="price">{{item.priceType === 'free' ? '免费' : item.priceType === 'bargain' ? '可议价' : item.price === 0 ? '免费' : '¥' + item.price}}</text>
+          <text class="status {{item.status === 'off' ? 'off' : ''}}">
+            {{item.status === 'off' ? '已下架' : item.status === 'deleted' ? '已删除' : '上架中'}}
+          </text>
+        </view>
+        <view class="card-stats">
+          <text class="stat">👁 {{item.viewCount}}</text>
+          <text class="stat">⭐ {{item.likeCount}}</text>
+          <text wx:if="{{item.flowerCount > 0}}" class="stat flower">🌸 {{item.flowerCount}}</text>
+        </view>
+        <view class="ops" wx:if="{{item.status !== 'deleted'}}">
+          <view class="op-btn" data-id="{{item._id}}" data-trade="{{item.tradeStatus}}" bindtap="changeTradeStatus">交易状态</view>
+          <view class="op-btn" data-id="{{item._id}}" data-status="{{item.status}}" bindtap="toggleStatus">
+            {{item.status === 'off' ? '上架' : '下架'}}
+          </view>
+          <view class="op-btn" data-id="{{item._id}}" bindtap="goEdit">编辑</view>
+          <view class="op-btn" data-id="{{item._id}}" bindtap="goDetail">查看</view>
+          <view class="op-btn danger" data-id="{{item._id}}" bindtap="del">删除</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：首次加载 -->
+  <view wx:if="{{loading && list.length === 0}}" class="skeleton-list">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="skeleton-card">
+      <view class="sk-cover"></view>
+      <view class="sk-body">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-desc"></view>
+        <view class="sk-row"><view class="sk-line sk-tag"></view></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view>📦</view>
+    <view class="empty-text">你还没有发布过内容</view>
+  </view>
+
+<view wx:if="{{loading && list.length > 0}}" class="loading">加载中…</view>
+</view>

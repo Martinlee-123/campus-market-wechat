@@ -1,0 +1,212 @@
+<!-- pages/index/index.wxml -->
+<view class="page">
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <input
+        class="search-input"
+        placeholder="搜索资料 / 物品…"
+        value="{{keyword}}"
+        confirm-type="search"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+        bindfocus="onSearchFocus"
+        bindblur="closeSearchPanel"
+        cursor-spacing="140"
+      />
+      <view wx:if="{{keyword}}" class="search-clear" bindtap="clearSearch">✕</view>
+    </view>
+    <view class="search-btn" bindtap="onSearchConfirm">搜索</view>
+  </view>
+
+  <!-- 搜索面板（历史 + 热门） -->
+  <view wx:if="{{showSearchPanel}}" class="search-mask" bindtap="closeSearchPanel">
+    <view class="search-panel" catchtap="noopSearchPanel">
+      <!-- 搜索历史 -->
+      <view wx:if="{{searchHistory.length > 0}}" class="sp-section">
+        <view class="sp-head">
+          <text class="sp-title">搜索历史</text>
+          <text class="sp-clear" catchtap="clearHistory">清空</text>
+        </view>
+        <view class="sp-tags">
+          <view
+            wx:for="{{searchHistory}}"
+            wx:key="*this"
+            class="sp-tag history"
+            data-word="{{item}}"
+            bindtap="onSearchWordTap"
+          >{{item}}<text class="sp-del" catchtap="delHistory" data-word="{{item}}">✕</text></view>
+        </view>
+      </view>
+      <!-- 热门搜索 -->
+      <view class="sp-section">
+        <view class="sp-head">
+          <text class="sp-title">🔥 热门搜索</text>
+        </view>
+        <view class="sp-tags">
+          <view
+            wx:for="{{hotWords}}"
+            wx:key="*this"
+            class="sp-tag hot"
+            data-word="{{item}}"
+            bindtap="onSearchWordTap"
+          >{{item}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类筛选 -->
+  <view class="cat-wrap">
+    <scroll-view class="cat-bar" scroll-x>
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="cat-item {{activeCat === item ? 'active' : ''}}"
+        data-cat="{{item}}"
+        bindtap="onCatTap"
+      >{{item}}</view>
+    </scroll-view>
+    <view class="cat-more" bindtap="toggleCatPanel">分类</view>
+  </view>
+
+  <!-- 全部分类弹出面板 -->
+  <view wx:if="{{showCatPanel}}" class="cat-mask" bindtap="toggleCatPanel">
+    <view class="cat-panel" catchtap="noop">
+      <view class="cat-panel-title">选择分类</view>
+      <view class="cat-grid">
+        <view
+          wx:for="{{categories}}"
+          wx:key="*this"
+          class="cat-cell {{activeCat === item ? 'active' : ''}}"
+          data-cat="{{item}}"
+          bindtap="onCatPanelTap"
+        >{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 二级分类标签（仅"学习资料"下有细分） -->
+  <scroll-view wx:if="{{subCatList.length > 0}}" class="subcat-bar" scroll-x>
+    <view
+      class="subcat-item {{activeSubCat === '' ? 'active' : ''}}"
+      data-sub=""
+      bindtap="onSubCatTap"
+    >全部</view>
+    <view
+      wx:for="{{subCatList}}"
+      wx:key="*this"
+      class="subcat-item {{activeSubCat === item ? 'active' : ''}}"
+      data-sub="{{item}}"
+      bindtap="onSubCatTap"
+    >{{item}}</view>
+  </scroll-view>
+
+  <!-- 三级分类标签（学科，仅选中某个二级分类后出现） -->
+  <scroll-view wx:if="{{thirdCatList.length > 0}}" class="thirdcat-bar" scroll-x>
+    <view
+      class="thirdcat-item {{activeThirdCat === '' ? 'active' : ''}}"
+      data-t=""
+      bindtap="onThirdCatTap"
+    >全部</view>
+    <view
+      wx:for="{{thirdCatList}}"
+      wx:key="*this"
+      class="thirdcat-item {{activeThirdCat === item ? 'active' : ''}}"
+      data-t="{{item}}"
+      bindtap="onThirdCatTap"
+    >{{item}}</view>
+  </scroll-view>
+
+  <!-- 排序条 -->
+  <view class="sort-bar">
+    <view
+      wx:for="{{sortOptions}}"
+      wx:key="key"
+      class="sort-item {{sort === item.key ? 'active' : ''}}"
+      data-sort="{{item.key}}"
+      bindtap="onSortTap"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- 未登录引导条：登录后可发布/收藏/私聊 -->
+  <view wx:if="{{!hasLogin}}" class="login-tip" bindtap="goLogin">
+    <text class="tip-icon">🔒</text>
+    <text class="tip-text">登录后可发布、收藏、私聊卖家</text>
+    <text class="tip-action">去登录 ›</text>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="list">
+    <view
+      wx:for="{{list}}"
+      wx:key="_id"
+      class="card"
+      data-id="{{item._id}}"
+      bindtap="goDetail"
+    >
+      <image
+        wx:if="{{item.cover}}"
+        class="cover"
+        src="{{item.cover}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view wx:else class="cover no-img">📄</view>
+
+      <view class="card-body">
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-desc">{{item.desc}}</view>
+        <view class="card-meta">
+          <text wx:if="{{item.priceType === 'free'}}" class="price free">免费</text>
+          <text wx:elif="{{item.priceType === 'bargain'}}" class="price bargain">可议价</text>
+          <text wx:else class="price">¥{{item.price}}</text>
+          <text class="tag {{item.tradeStatus === 'sold' ? 'sold' : ''}}">{{item.tradeStatus === 'sold' ? '已出' : item.tradeStatus === 'pending' ? '进行中' : (item.subCategory || item.category)}}{{item.thirdCategory && item.tradeStatus === 'selling' ? '·' + item.thirdCategory : ''}}</text>
+        </view>
+        <view class="card-foot">
+          <text class="seller">{{item.nickname || '匿名'}}<text wx:if="{{item.verified === 'approved'}}" class="verified-badge">🎓</text></text>
+          <text wx:if="{{item.flowerCount > 0}}" class="stat flower">🌸 {{item.flowerCount}}</text>
+          <text class="stat">👁 {{item.viewCount}}</text>
+          <text class="stat">⭐ {{item.likeCount}}</text>
+          <text class="time">{{item.timeText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：首次加载时显示（列表为空） -->
+  <view wx:if="{{loading && list.length === 0}}" class="skeleton-list">
+    <view wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this" class="skeleton-card">
+      <view class="sk-cover"></view>
+      <view class="sk-body">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-desc"></view>
+        <view class="sk-row">
+          <view class="sk-line sk-price"></view>
+          <view class="sk-line sk-tag"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空态：引导去发布 -->
+  <view wx:if="{{!loading && list.length === 0}}" class="empty">
+    <view class="empty-icon">🛒</view>
+    <view class="empty-text">还没有内容，来发布第一件宝贝吧</view>
+    <view class="empty-btn" bindtap="goPublish">＋ 去发布</view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view wx:if="{{finished && list.length > 0}}" class="list-end">— 到底啦 —</view>
+  <view wx:if="{{loading && list.length > 0}}" class="list-loading">加载中…</view>
+
+  <!-- 回到顶部 -->
+  <view wx:if="{{showBackTop}}" class="back-top" bindtap="backTop">
+    <text class="arrow">↑</text>
+    <text class="label">回顶端</text>
+  </view>
+
+  <!-- 悬浮发布按钮 -->
+  <view class="fab" bindtap="goPublish">＋</view>
+</view>

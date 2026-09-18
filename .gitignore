@@ -1,0 +1,21 @@
+# ---- 依赖 ----
+node_modules/
+miniprogram_npm/
+**/node_modules/
+
+# ---- 微信开发者工具本地私有配置 ----
+project.private.config.json
+.idea/
+.vscode/
+*.code-workspace
+
+# ---- 云开发产物 ----
+cloudfunctions/**/package-lock.json
+
+# ---- 系统/编辑器 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+~$*

@@ -1,0 +1,73 @@
+<!-- pages/detail/detail.wxml -->
+<view class="page" wx:if="{{item}}">
+
+  <!-- 图片轮播 -->
+  <swiper wx:if="{{item.images.length > 0}}" class="swiper" indicator-dots indicator-active-color="#7C6BC0">
+    <swiper-item wx:for="{{item.images}}" wx:key="index">
+      <image class="swiper-img" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="preview" />
+    </swiper-item>
+  </swiper>
+  <view wx:else class="no-img">📄 暂无图片</view>
+
+  <view class="info">
+    <view class="price-row">
+      <text wx:if="{{item.priceType === 'free'}}" class="price">🎁 免费</text>
+      <text wx:elif="{{item.priceType === 'bargain'}}" class="price">💬 可议价</text>
+      <text wx:else class="price">¥{{item.price}}</text>
+      <view wx:if="{{item.tradeStatus === 'sold'}}" class="sold-badge">已出</view>
+      <view wx:elif="{{item.tradeStatus === 'pending'}}" class="pending-badge">进行中</view>
+      <view class="like {{liked ? 'liked' : ''}}" bindtap="toggleLike">♡ {{liked ? '已收藏' : '收藏'}}</view>
+    </view>
+    <view class="title">{{item.title}}</view>
+    <view class="meta">
+      <text class="tag">{{item.subCategory ? item.category + ' / ' + item.subCategory : item.category}}{{item.thirdCategory ? ' / ' + item.thirdCategory : ''}}</text>
+      <text class="time">{{item.timeText}}</text>
+    </view>
+    <view class="desc">{{item.desc}}</view>
+    <view wx:if="{{item.tags && item.tags.length > 0}}" class="tags">
+      <text wx:for="{{item.tags}}" wx:key="*this" class="tag-chip">#{{item}}</text>
+    </view>
+  </view>
+
+  <view class="seller-card">
+    <view class="seller-title">卖家信息</view>
+    <!-- 点头像/昵称进卖家主页 -->
+    <view class="seller-name" bindtap="goSeller">
+      <image wx:if="{{item.avatar}}" class="seller-avatar" src="{{item.avatar}}" mode="aspectFill" />
+      <view wx:else class="seller-avatar placeholder">👤</view>
+      <text class="seller-nick">{{item.nickname || '匿名用户'}}</text>
+      <text wx:if="{{item.verified === 'approved'}}" class="verified-badge">🎓 已认证</text>
+      <text wx:if="{{item.flowerCount > 0}}" class="flower-count">🌸 {{item.flowerCount}}</text>
+      <text class="enter-seller">主页 ›</text>
+    </view>
+    <view wx:if="{{isMine}}" class="seller-contact">
+      <text class="contact-plain">{{item.contactType === 'QQ' ? 'QQ' : '微信'}}：{{item.contact}}</text>
+    </view>
+    <!-- 站内私信为主入口（核心闭环） -->
+    <view wx:if="{{!isMine}}" class="seller-contact chat-entry" bindtap="goChat">
+      <text class="chat-entry-icon">💬</text>
+      <text class="chat-entry-text">私信{{item.nickname || '卖家'}}（站内聊天）</text>
+      <text class="copy">›</text>
+    </view>
+    <!-- 复制联系方式降级为次要，需先私信，点击弹窗引导走站内聊 -->
+    <view wx:if="{{!isMine}}" class="seller-contact copy-secondary" bindtap="copyContactDemoted">
+      <text class="contact-mask">复制{{item.contactType === 'QQ' ? 'QQ' : '微信'}}（不推荐）</text>
+      <text class="copy">📋</text>
+    </view>
+  </view>
+
+  <view class="safety">⚠️ 校园交易提示：确认好资料/物品再交易，建议校内当面进行，避免财产损失。</view>
+
+  <view class="report-entry" bindtap="goReport">举报此内容</view>
+  <view class="poster-entry" bindtap="goPoster">🖼 生成海报</view>
+
+  <view class="bottom-bar">
+    <button wx:if="{{isMine}}" class="contact-btn text-btn" bindtap="copyContact">复制联系方式</button>
+    <button wx:if="{{!isMine}}" class="contact-btn primary-btn" bindtap="goChat">💬 私信卖家</button>
+    <button wx:if="{{!isMine}}" class="contact-btn text-btn" bindtap="copyContactDemoted">📋 复制微信</button>
+    <button wx:if="{{!isMine}}" class="flower-btn {{copied ? 'ready' : 'locked'}}" bindtap="sendFlower">🌸 送小花</button>
+    <button wx:if="{{!isMine}}" class="fav-btn {{liked ? 'liked' : ''}}" bindtap="toggleLike">♡ {{liked ? '取消' : '收藏'}}</button>
+  </view>
+</view>
+
+<view wx:else class="loading">{{loading ? '加载中…' : '内容不存在或已下架'}}</view>

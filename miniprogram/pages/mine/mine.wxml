@@ -1,0 +1,108 @@
+<!-- pages/mine/mine.wxml -->
+<view class="page">
+
+  <view class="profile">
+    <!-- 点头像/昵称进自己主页（与点什么别人头像逻辑一致） -->
+    <view class="profile-head" bindtap="goSelf">
+      <image wx:if="{{userInfo.avatar}}" class="avatar" src="{{userInfo.avatar}}" />
+      <view wx:else class="avatar placeholder">👤</view>
+      <view class="profile-right">
+        <view class="nickname">{{userInfo.nickname || '未登录'}}<text wx:if="{{hasLogin && flowerReceived > 0}}" class="flower-badge">🌸 {{flowerReceived}}</text></view>
+        <view class="login-btn" wx:if="{{!hasLogin}}" catchtap="onLogin">点击登录</view>
+        <view class="logged" wx:else>已登录</view>
+        <view wx:if="{{hasLogin}}" class="enter-home">我的主页 ›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="menu">
+    <view class="menu-item admin" wx:if="{{isAdmin}}" bindtap="goAdmin">
+      <text class="menu-icon">⚙️</text>
+      <text>管理后台</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goMyPosts">
+      <text class="menu-icon">📦</text>
+      <text>我发布的</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" wx:if="{{hasLogin}}" bindtap="goAuth">
+      <text class="menu-icon">🎓</text>
+      <text>校内认证</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goFavorites">
+      <text class="menu-icon">♥</text>
+      <text>我的收藏</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goHistory">
+      <text class="menu-icon">🕘</text>
+      <text>最近浏览</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" wx:if="{{hasLogin}}" bindtap="goBlacklist">
+      <text class="menu-icon">🔒</text>
+      <text>黑名单</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goPublish">
+      <text class="menu-icon">➕</text>
+      <text>发布闲置</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goAgreement">
+      <text class="menu-icon">📄</text>
+      <text>用户协议与隐私</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" wx:if="{{hasLogin}}" bindtap="clearUser">
+      <text class="menu-icon">🚪</text>
+      <text>退出登录</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 登录弹层：选择头像 + 填写昵称（微信规范） -->
+  <view wx:if="{{showLogin}}" class="mask" catchtouchmove="true">
+    <view class="login-pop">
+      <view class="pop-title">登录</view>
+      <view class="pop-sub">选择头像并填写昵称，完成身份绑定</view>
+
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{loginAvatar}}" class="pop-avatar" src="{{loginAvatar}}" />
+        <view wx:else class="pop-avatar placeholder">👤</view>
+        <text class="avatar-hint">选择头像</text>
+      </button>
+
+      <input
+        class="nick-input"
+        type="nickname"
+        placeholder="点击填写昵称"
+        value="{{loginNick}}"
+        bindinput="onNickInput"
+      />
+
+      <!-- 协议同意勾选（登录前必须同意） -->
+      <view class="agree-row" bindtap="onAgreeChange">
+        <view class="agree-box {{agreeChecked ? 'checked' : ''}}">{{agreeChecked ? '✓' : ''}}</view>
+        <view class="agree-text">我已阅读并同意
+          <text class="agree-link" catchtap="goAgreement">《用户服务协议》</text>和
+          <text class="agree-link" catchtap="goPrivacy">《隐私政策》</text>
+        </view>
+      </view>
+
+      <view class="pop-ops">
+        <button class="cancel" bindtap="closeLogin">取消</button>
+        <button class="confirm" bindtap="confirmLogin">登录</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="about">
+    <view class="about-title">关于畅学尼龙</view>
+    <view class="about-text">面向校园的电子学习资料与二手物品交易平台。支持线上发布、浏览、搜索与收藏；交易联系卖家线下或私下进行，请务必注意安全。</view>
+  </view>
+
+  <view class="version">v3.0</view>
+</view>
