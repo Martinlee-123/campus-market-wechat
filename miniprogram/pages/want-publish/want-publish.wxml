@@ -1,5 +1,12 @@
 <!-- pages/want-publish/want-publish.wxml：发布求购 -->
 <view class="page">
+  <!-- 草稿状态提示条：有未完成草稿时显示 -->
+  <view wx:if="{{draftActive}}" class="draft-bar">
+    <text class="draft-dot">📝</text>
+    <text class="draft-text">已自动保存草稿</text>
+    <view class="draft-clear" bindtap="clearDraftTap">清空</view>
+  </view>
+
   <view class="form">
 
     <view class="row">

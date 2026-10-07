@@ -1,5 +1,17 @@
 .page { background: #f5f5f5; min-height: 100vh; padding-bottom: 60rpx; }
 
+.draft-bar {
+  display: flex; align-items: center;
+  background: #FFF7E6; border-bottom: 1rpx solid #F5E6C8;
+  padding: 16rpx 30rpx;
+}
+.draft-dot { font-size: 28rpx; margin-right: 10rpx; }
+.draft-text { flex: 1; font-size: 24rpx; color: #B8860B; }
+.draft-clear {
+  font-size: 24rpx; color: #B8860B;
+  background: #FBE8C8; border-radius: 24rpx; padding: 6rpx 24rpx;
+}
+
 .form { background: #fff; padding: 0 30rpx; }
 
 .row {

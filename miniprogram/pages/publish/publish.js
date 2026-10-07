@@ -256,57 +256,62 @@ Page({
       return;
     }
 
-    const { title, desc, price, images, contact, categoryIndex, priceType } = this.data;
-    if (!title.trim()) return wx.showToast({ title: '请填写标题', icon: 'none' });
-    if (!desc.trim()) return wx.showToast({ title: '请填写描述', icon: 'none' });
+    const { title: vTitle, desc: vDesc, price: vPrice, images: vImages, contact: vContact, categoryIndex: vCatIdx, priceType: vPriceType } = this.data;
+    if (!vTitle.trim()) return wx.showToast({ title: '请填写标题', icon: 'none' });
+    if (!vDesc.trim()) return wx.showToast({ title: '请填写描述', icon: 'none' });
     // 价格：选了快捷项则不填数字，否则必须有有效数字
-    const hasPriceType = priceType === 'free' || priceType === 'bargain';
-    if (!hasPriceType && (!price.trim() || isNaN(Number(price)) || Number(price) < 0)) {
+    const hasPriceType = vPriceType === 'free' || vPriceType === 'bargain';
+    if (!hasPriceType && (!vPrice.trim() || isNaN(Number(vPrice)) || Number(vPrice) < 0)) {
       return wx.showToast({ title: '请填写有效价格，或选择免费/可议价', icon: 'none' });
     }
-    if (!contact.trim()) return wx.showToast({ title: '请填写联系方式', icon: 'none' });
+    if (!vContact.trim()) return wx.showToast({ title: '请填写联系方式', icon: 'none' });
 
     wx.showLoading({ title: '发布中…', mask: true });
 
     try {
       // 上传图片到云存储
       const cloudPaths = [];
-      for (let i = 0; i < images.length; i++) {
-        const ext = images[i].split('.').pop().split('?')[0] || 'jpg';
+      for (let i = 0; i < vImages.length; i++) {
+        const ext = vImages[i].split('.').pop().split('?')[0] || 'jpg';
         const cloudPath = `goods/${Date.now()}_${i}.${ext}`;
         const upRes = await wx.cloud.uploadFile({
           cloudPath,
-          filePath: images[i]
+          filePath: vImages[i]
         });
         cloudPaths.push(upRes.fileID);
       }
 
       // 记住联系方式
-      wx.setStorageSync('myContact', contact);
+      wx.setStorageSync('myContact', vContact);
 
       // 调云函数写数据库
       const res = await wx.cloud.callFunction({
         name: 'publish',
         data: {
-          title: title.trim(),
-          desc: desc.trim(),
+          title: vTitle.trim(),
+          desc: vDesc.trim(),
           tags: this.data.tags,
-          price: hasPriceType ? 0 : Number(price),
-          priceType,
-          category: this.data.categories[categoryIndex],
+          price: hasPriceType ? 0 : Number(vPrice),
+          priceType: vPriceType,
+          category: this.data.categories[vCatIdx],
           subCategory: this.data.selectedSubCat,
           thirdCategory: this.data.selectedThirdCat,
           images: cloudPaths,
-          contact: contact.trim(),
+          contact: vContact.trim(),
           contactType: this.data.contactType
         }
       });
 
       wx.hideLoading();
       if (res.result && res.result.ok) {
-        // 发布成功：清除草稿
+        // 发布成功：清除草稿 + 重置表单，避免 tab 回来时残留上一条内容
         this.clearDraft();
-        this.setData({ draftActive: false });
+        this.setData({
+          title: '', desc: '', tags: '', price: '', priceType: '',
+          categoryIndex: 0, selectedSubCat: '', selectedThirdCat: '',
+          images: [], contactType: '微信', draftActive: false
+        });
+        this.refreshSubCats();
         wx.showToast({ title: '发布成功', icon: 'success' });
         setTimeout(() => {
           wx.switchTab({ url: '/pages/index/index' });

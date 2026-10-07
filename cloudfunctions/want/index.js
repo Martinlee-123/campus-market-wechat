@@ -119,6 +119,18 @@ async function publishWant(event, openid) {
   const userCnt = await db.collection('users').where({ _openid: openid }).count();
   if (userCnt.total === 0) return { ok: false, msg: '请先登录后再发布求购' };
 
+  // 先取字段（必须在内容安全检测之前声明，否则 TDZ 报错）
+  const title = (event.title || '').trim();
+  const desc = (event.desc || '').trim();
+  const category = event.category || '其他';
+  const contact = (event.contact || '').trim();
+  const contactType = event.contactType === 'QQ' ? 'QQ' : '微信';
+
+  if (!title) return { ok: false, msg: '求购内容不能为空' };
+  if (!desc) return { ok: false, msg: '请补充说明' };
+  if (!contact) return { ok: false, msg: '请填写联系方式' };
+  if (contactType !== '微信' && contactType !== 'QQ') return { ok: false, msg: '请选择联系方式类型' };
+
   // ---- 内容安全检测 ----
   let myNickname = '';
   try {
@@ -131,17 +143,6 @@ async function publishWant(event, openid) {
   if (!textCheck.ok) return { ok: false, msg: textCheck.msg };
   const contactCheck = await sec.checkText(cloud, openid, contact, { scene: 3, nickname: myNickname });
   if (!contactCheck.ok) return { ok: false, msg: contactCheck.msg };
-
-  const title = (event.title || '').trim();
-  const desc = (event.desc || '').trim();
-  const category = event.category || '其他';
-  const contact = (event.contact || '').trim();
-  const contactType = event.contactType === 'QQ' ? 'QQ' : '微信';
-
-  if (!title) return { ok: false, msg: '求购内容不能为空' };
-  if (!desc) return { ok: false, msg: '请补充说明' };
-  if (!contact) return { ok: false, msg: '请填写联系方式' };
-  if (contactType !== '微信' && contactType !== 'QQ') return { ok: false, msg: '请选择联系方式类型' };
 
   // 限流：60秒1条
   const recent = await db.collection('wants')
