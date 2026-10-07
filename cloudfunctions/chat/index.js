@@ -100,6 +100,10 @@ async function sendMessage(event, openid) {
   if (users.indexOf(openid) === -1) return { ok: false, msg: '无权发送' };
   const other = users[0] === openid ? users[1] : users[0];
 
+  // 拉黑校验：任一方拉黑了对方，都不允许发消息（解决“拉黑后还能收到对方消息”）
+  if (await isBlocked(openid, other)) return { ok: false, msg: '你已拉黑该用户，无法发送' };
+  if (await isBlocked(other, openid)) return { ok: false, msg: '对方已拉黑你，无法发送' };
+
   const msg = {
     conversationId,
     from: openid,
@@ -178,8 +182,7 @@ async function myConversations(openid) {
   for (const c of mine) {
     const other = c.users[0] === openid ? c.users[1] : c.users[0];
     const readAt = (c.readBy && c.readBy[openid]) || 0;
-    let rt = 0;
-    if (readAt) { const t = readAt.$date ? readAt.$date : readAt; rt = new Date(t).getTime(); if (isNaN(rt)) rt = 0; }
+    const rt = readAtTs(readAt);
     const unread = await countUnreadInConv(c._id, openid, rt > 0 ? new Date(rt) : 0);
     const otherUser = userMap[other] || {};
     list.push({
@@ -220,8 +223,7 @@ async function unreadCount(openid) {
   let count = 0;
   for (const c of cnvs) {
     const readAt = (c.readBy && c.readBy[openid]) || 0;
-    let rt = 0;
-    if (readAt) { const t = readAt.$date ? readAt.$date : readAt; rt = new Date(t).getTime(); if (isNaN(rt)) rt = 0; }
+    const rt = readAtTs(readAt);
     count += await countUnreadInConv(c._id, openid, rt > 0 ? new Date(rt) : 0);
   }
   return { ok: true, count };
@@ -236,10 +238,37 @@ async function markRead(event, openid) {
   const users = conv.data.users || [];
   if (users.indexOf(openid) === -1) return { ok: false, msg: '无权操作' };
 
-  const readBy = conv.data.readBy || {};
-  readBy[openid] = db.serverDate();
-  await db.collection('conversations').doc(conversationId).update({ data: { readBy } });
+  // 用 db.serverDate()（数据库服务器时钟）存已读时间，与 messages.createdAt 同一时钟基准，
+  // 彻底消除云函数实例时钟与数据库时钟偏差导致的未读误判（红点迟迟不消）。
+  // 用点路径写入 readBy.<openid>，只更新这一个键，不影响对方未读，也绕开嵌套对象序列化问题。
+  await db.collection('conversations').doc(conversationId).update({
+    data: { ['readBy.' + openid]: db.serverDate() }
+  });
   return { ok: true };
+}
+
+// 判断 openid 是否拉黑了 targetOpenid
+async function isBlocked(openid, targetOpenid) {
+  if (!targetOpenid) return false;
+  try {
+    const cnt = await db.collection('blacklist')
+      .where({ _openid: openid, targetOpenid })
+      .count();
+    return cnt.total > 0;
+  } catch (e) {
+    return false;
+  }
+}
+
+// 读取 readBy[openid] 的时间戳（ms）：兼容数字 ms、{$date} 对象、Date、ISO 字符串
+function readAtTs(readAt) {
+  if (!readAt) return 0;
+  // 数字毫秒时间戳（新写法）
+  if (typeof readAt === 'number') return readAt;
+  // 云开发 serverDate 序列化对象
+  const v = readAt.$date != null ? readAt.$date : readAt;
+  const t = new Date(v).getTime();
+  return isNaN(t) ? 0 : t;
 }
 
 function formatTime(dateObj) {

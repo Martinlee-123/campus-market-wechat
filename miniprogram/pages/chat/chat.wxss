@@ -1,21 +1,43 @@
 /* pages/chat/chat.wxss */
 .page { display: flex; flex-direction: column; height: 100vh; background: #f5f5f5; }
+.peer-bar {
+  display: flex; align-items: center;
+  padding: 16rpx 24rpx; background: #fff; border-bottom: 1rpx solid #eee;
+}
+.peer-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; background: #eee; }
+.peer-avatar.placeholder {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36rpx; color: #bbb;
+}
+.peer-info { margin-left: 16rpx; }
+.peer-name { font-size: 28rpx; color: #333; font-weight: 500; }
+.peer-hint { font-size: 20rpx; color: #bbb; margin-top: 2rpx; }
 .goods-bar {
   padding: 14rpx 24rpx; background: #fdf6e3; color: #8a6d3b;
   font-size: 24rpx; border-bottom: 1rpx solid #eee;
 }
-.msg-list { flex: 1; overflow-y: auto; padding: 24rpx; }
+.msg-list {
+  flex: 1;
+  min-height: 0;           /* 关键：scroll-view 在 flex 容器里需 min-height:0 才不溢出 */
+  padding: 24rpx;
+  box-sizing: border-box;
+  width: 100%;
+}
+.bottom-anchor { height: 2rpx; width: 100%; }
 .loading { text-align: center; color: #999; padding: 40rpx 0; }
-.row { display: flex; flex-direction: column; margin-bottom: 24rpx; }
+.row { display: flex; flex-direction: column; margin-bottom: 24rpx; box-sizing: border-box; }
 .row.other { align-items: flex-start; }
-.row.mine { align-items: flex-end; }
+.row.mine { align-items: flex-end; padding-right: 4rpx; }
 .bubble {
   max-width: 70%;
+  box-sizing: border-box;
   padding: 18rpx 24rpx;
   border-radius: 16rpx;
   font-size: 28rpx;
   line-height: 1.5;
   word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 .row.other .bubble { background: #fff; color: #333; border-top-left-radius: 4rpx; }
 .row.mine .bubble { background: #7C6BC0; color: #fff; border-top-right-radius: 4rpx; }

@@ -1,19 +1,33 @@
 <!-- pages/chat/chat.wxml：聊天窗口 -->
 <view class="page">
+  <!-- 对方信息条：点头像进对方主页（拉黑在主页原位置） -->
+  <view class="peer-bar" bindtap="goOtherProfile">
+    <image wx:if="{{otherAvatar}}" class="peer-avatar" src="{{otherAvatar}}" mode="aspectFill" />
+    <view wx:else class="peer-avatar placeholder">👤</view>
+    <view class="peer-info">
+      <view class="peer-name">{{nickname}}</view>
+      <view class="peer-hint">点击头像查看主页</view>
+    </view>
+  </view>
+
   <view wx:if="{{goodsTitle}}" class="goods-bar">📦 关于：{{goodsTitle}}</view>
 
-  <view class="msg-list">
+  <scroll-view
+    class="msg-list"
+    scroll-y
+    scroll-top="{{scrollTop}}"
+    scroll-with-animation="{{false}}"
+  >
     <view wx:if="{{loading}}" class="loading">加载中…</view>
     <view wx:else>
       <block wx:for="{{list}}" wx:key="_id">
-        <!-- isMine 在前端渲染前已由 loadHistory 打好标记 -->
         <view class="row {{item.isMine ? 'mine' : 'other'}}">
           <view class="bubble">{{item.content}}</view>
           <view class="time">{{item.timeText}}</view>
         </view>
       </block>
     </view>
-  </view>
+  </scroll-view>
 
   <view class="input-bar">
     <input

@@ -54,9 +54,13 @@ async function remove(event, openid) {
   const exist = await db.collection('blacklist')
     .where({ _openid: openid, targetOpenid }).get();
   if (exist.data.length) {
-    await db.collection('blacklist').doc(exist.data[0]._id).remove();
+    const delRes = await db.collection('blacklist').doc(exist.data[0]._id).remove();
+    console.log('[blacklist.remove] 已删除', exist.data.length, '条, removed=', delRes.stats && delRes.stats.removed);
+  } else {
+    // 查不到：可能字段不符或历史数据异常，打日志便于排查
+    console.warn('[blacklist.remove] 未找到记录: openid=', openid, 'targetOpenid=', targetOpenid);
   }
-  return { ok: true, msg: '已取消拉黑' };
+  return { ok: true, msg: '已取消拉黑', removed: exist.data.length };
 }
 
 // 我的黑名单列表（带对方资料）

@@ -2,6 +2,7 @@
 Page({
   data: {
     goodsId: '',
+    byOpenid: '',
     seller: null,
     list: [],
     loading: true,
@@ -12,18 +13,21 @@ Page({
 
   onLoad(options) {
     const goodsId = options.goodsId;
+    const byOpenid = options.byOpenid || '';
     const self = options.self; // '1' = 我的主页（自己）
-    if (!goodsId && !self) {
+    if (!goodsId && !self && !byOpenid) {
       wx.showToast({ title: '参数错误', icon: 'none' });
       setTimeout(() => wx.navigateBack(), 800);
       return;
     }
-    this.setData({ goodsId, selfMode: !!self });
+    this.setData({ goodsId, byOpenid, selfMode: !!self });
     this.loadSeller();
   },
 
   loadSeller() {
-    const data = this.data.selfMode ? { self: 1 } : { goodsId: this.data.goodsId };
+    const data = this.data.selfMode
+      ? { self: 1 }
+      : (this.data.byOpenid ? { byOpenid: this.data.byOpenid } : { goodsId: this.data.goodsId });
     wx.cloud.callFunction({
       name: 'getSeller',
       data
@@ -44,9 +48,10 @@ Page({
       }));
       wx.setNavigationBarTitle({ title: (seller.nickname || '我的') + '的主页' });
       const sellerId = (r.sellerId || '').trim();
-      this.setData({ seller, list, loading: false, sellerId });
-      // 看别人主页时，查询是否已拉黑；自己主页不显示拉黑按钮
-      if (!this.data.selfMode && sellerId) {
+      // blocked 直接来自 getSeller 返回（不再单独调 check，避免拉黑后 getSeller 拒绝加载导致拿不到 sellerId）
+      this.setData({ seller, list, loading: false, sellerId, blocked: !!r.blocked });
+      // 兜底：若 getSeller 没返回 blocked（旧版云函数），则单独查一次
+      if (!this.data.selfMode && sellerId && r.blocked === undefined) {
         this.checkBlocked(sellerId);
       }
     }).catch(err => {
@@ -64,7 +69,7 @@ Page({
       .catch(() => {});
   },
 
-  // 拉黑 / 取消拉黑
+  // 拉黑 / 取消拉黑（先服务端查真实状态，避免前端 blocked 状态过期导致拉灰/无法取消）
   toggleBlock() {
     const sellerId = this.data.sellerId;
     if (!sellerId) return wx.showToast({ title: '暂时无法操作', icon: 'none' });
@@ -77,7 +82,20 @@ Page({
       });
       return;
     }
-    const blocked = this.data.blocked;
+    // 查真实拉黑状态
+    wx.cloud.callFunction({ name: 'blacklist', data: { action: 'check', targetOpenid: sellerId } })
+      .then(res => {
+        const blocked = !!(res.result && res.result.blocked);
+        this.setData({ blocked });
+        this.confirmToggle(blocked, sellerId);
+      })
+      .catch(() => {
+        // 查不到就用本地状态兜底
+        this.confirmToggle(this.data.blocked, sellerId);
+      });
+  },
+
+  confirmToggle(blocked, sellerId) {
     wx.showModal({
       title: blocked ? '取消拉黑' : '拉黑用户',
       content: blocked
@@ -99,9 +117,10 @@ Page({
           } else {
             wx.showToast({ title: (res.result && res.result.msg) || '操作失败', icon: 'none' });
           }
-        }).catch(() => {
+        }).catch((err) => {
+          console.error('[blacklist] 调用失败:', err);
           wx.hideLoading();
-          wx.showToast({ title: '操作失败', icon: 'none' });
+          wx.showToast({ title: '操作失败，请确认 blacklist 云函数已部署', icon: 'none', duration: 3000 });
         });
       }
     });

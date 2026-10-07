@@ -30,6 +30,14 @@ Page({
         timeText: c.lastTimeText || ''
       }));
       this.setData({ list, loading: false });
+      // 同步刷新底部 tabBar 未读红点
+      if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+        this.getTabBar().refreshUnread();
+      } else {
+        const app = getApp();
+        const tb = app && app.globalData && app.globalData.tabBar;
+        if (tb && typeof tb.refreshUnread === 'function') tb.refreshUnread();
+      }
     }).catch(err => {
       console.error(err);
       this.setData({ loading: false });
@@ -42,7 +50,9 @@ Page({
     if (!conv || !conv.conversationId) return;
     wx.navigateTo({
       url: '/pages/chat/chat?conversationId=' + conv.conversationId +
-        '&other=' + conv.other + '&nickname=' + encodeURIComponent(conv.otherNickname || '同学')
+        '&other=' + conv.other +
+        '&avatar=' + encodeURIComponent(conv.otherAvatar || '') +
+        '&nickname=' + encodeURIComponent(conv.otherNickname || '同学')
     });
   },
 

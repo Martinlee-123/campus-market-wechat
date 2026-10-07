@@ -63,12 +63,26 @@ Component({
 
   lifetimes: {
     attached() {
+      // 注册到全局，供非 tab 页（如 chat 聊天页）刷新未读红点
+      const app = getApp();
+      if (app && app.globalData) app.globalData.tabBar = this;
       this.refreshUnread();
-      // 每 30 秒刷新一次未读数
-      this._timer = setInterval(() => this.refreshUnread(), 30000);
+      // 每 15 秒刷新一次未读数（原 30s 太久，红点消除迟滞）
+      this._timer = setInterval(() => this.refreshUnread(), 15000);
     },
     detached() {
       if (this._timer) { clearInterval(this._timer); this._timer = null; }
+      const app = getApp();
+      if (app && app.globalData && app.globalData.tabBar === this) {
+        app.globalData.tabBar = null;
+      }
+    }
+  },
+
+  // 每次页面显示时也刷新（切 tab 回来红点即时同步）
+  pageLifetimes: {
+    show() {
+      this.refreshUnread();
     }
   }
 });

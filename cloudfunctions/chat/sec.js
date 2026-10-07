@@ -12,6 +12,7 @@
 //     （色情/违法涉枪爆恐/诈骗赌博/非法网址样本/广告清洗），不含政治类。
 
 const MAX_TEXT_LEN = 2500; // msgSecCheck 文本上限
+const MSG_SEC_TIMEOUT = 1500; // 微信 msgSecCheck 调用超时上限(ms)：超时按“接口不可用”放行，避免阻塞发布/发送
 const path = require('path');
 const fs = require('fs');
 
@@ -130,7 +131,12 @@ async function checkText(cloud, openid, text, opts = {}) {
     if (opts.title) payload.title = String(opts.title).slice(0, 2500);
     if (opts.nickname) payload.nickname = String(opts.nickname).slice(0, 2500);
 
-    const res = await cloud.openapi.security.msgSecCheck(payload);
+    // 加超时保护：微信接口异常（如 -604101 权限未开放）若不设超时，会阻塞到接口自身超时(可达十几秒)，
+    // 导致“发送消息很慢/要下拉刷新才收到”。超时即当作接口不可用 → 放行（本地词库已在上一步拦截）。
+    const res = await Promise.race([
+      cloud.openapi.security.msgSecCheck(payload),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('msgSecCheck timeout')), MSG_SEC_TIMEOUT))
+    ]);
     const suggest = res && res.result && res.result.suggest;
     if (suggest === 'pass') return { ok: true };
     if (suggest === 'risky') return { ok: false, msg: '内容包含违规信息，请修改后重试' };

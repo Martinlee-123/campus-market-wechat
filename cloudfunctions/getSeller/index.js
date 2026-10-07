@@ -15,6 +15,10 @@ exports.main = async (event, context) => {
   let sellerOpenid = '';
   if (selfMode) {
     sellerOpenid = openid;
+  } else if (event.byOpenid) {
+    // 由 openid 直接指定（聊天页点头像进主页用）
+    sellerOpenid = String(event.byOpenid).trim();
+    if (!sellerOpenid) return { ok: false, msg: '缺少用户ID' };
   } else {
     const goodsId = (event.goodsId || '').trim();
     if (!goodsId) return { ok: false, msg: '缺少商品ID' };
@@ -30,14 +34,13 @@ exports.main = async (event, context) => {
     }
   }
 
-  // 拉黑拦截：查看别人的主页时，若对方被我拉黑则拒绝
+  // 拉黑状态：查看别人的主页时，标记对方是否被我拉黑（不拒绝加载，前端据此显示“已拉黑”并允许取消）
+  let blocked = false;
   if (!selfMode && sellerOpenid) {
-    const blocked = await db.collection('blacklist')
+    const b = await db.collection('blacklist')
       .where({ _openid: openid, targetOpenid: sellerOpenid })
       .count().catch(() => ({ total: 0 }));
-    if (blocked.total > 0) {
-      return { ok: false, msg: '该用户已被你拉黑' };
-    }
+    blocked = b.total > 0;
   }
 
   // 2. 查卖家的资料（昵称/头像/收到的小花）
@@ -81,6 +84,7 @@ exports.main = async (event, context) => {
     ok: true,
     seller: profile,
     goods: goodsList,
-    sellerId: sellerOpenid
+    sellerId: sellerOpenid,
+    blocked
   };
 };
